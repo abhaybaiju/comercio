@@ -1,5 +1,5 @@
-import random
 import math
+import random
 
 # the equities list is a predefined list of the names of all the different stocks/companies
 equityNames = list(('Apple', 'Microsoft', 'IBM', 'Xerox', 'Pixar'))
@@ -67,6 +67,7 @@ def UpdateEquityPrice(find, newPrice):
             i.UpdatePrice(newPrice)
             break
 
+
 def GetRandomPrice(find):
     for i in equityList:
         if i.name == find:
@@ -77,4 +78,3 @@ def GetRandomPrice(find):
             resultPrice = (random.randint(m, n) * 0.05)
             resultPrice = float("{:.2f}".format(resultPrice))
             return resultPrice
-
