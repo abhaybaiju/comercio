@@ -1,10 +1,9 @@
 from datetime import datetime
 import random
-from backend.securityGenerator import equityNames, equityList, GetEquityAttributes, UpdateBatchSize, GetRandomPrice
+from backend.securityGenerator import equity, equityNames, equityList, GetEquityAttributes, UpdateBatchSize, GetRandomPrice
 # default ISIN index
 index = 100000000
-indexLocked = bool()
-indexLocked = 0
+indexLocked = bool(0)
 
 buyOrdersList = list()
 sellOrdersList = list()
@@ -31,14 +30,14 @@ def RandomGenerator(self, minOrders = 50 , maxOrders = 100):
         minOrders = 50
         maxOrders = 100
 
-    global index, indexLocked
+    global index, indexLocked, buyOrdersList, sellOrdersList
     indexLocked = 1
 
     for i in range(minOrders, maxOrders):
         index+=1
         orderID = index
-        orderName = equityNames[random.randomInt(0, (len(equityNames) - 1))]
-        orderQuantity = random.randomInt(1, 200)
+        orderName = equityNames[random.randint(0, (len(equityNames) - 1))]
+        orderQuantity = random.randint(1, 200)
         orderAON = bool(random.getrandbits(1))
         orderBOS = bool(random.getrandbits(1))
         if(random.getrandbits(1)):
@@ -46,6 +45,14 @@ def RandomGenerator(self, minOrders = 50 , maxOrders = 100):
         else:
             orderPrice = 0
 
+        if(orderBOS == 0):
+            buyOrdersList.append(order(orderID, orderName, orderQuantity, orderAON, orderBOS, orderPrice))
+        else:
+            sellOrdersList.append(order(orderID, orderName, orderQuantity, orderAON, orderBOS, orderPrice))
+        UpdateBatchSize(orderName)
 
+RandomGenerator(100, 200)
+print(len(buyOrdersList))
+print(len(sellOrdersList))
 
 
