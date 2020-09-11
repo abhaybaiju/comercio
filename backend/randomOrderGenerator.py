@@ -34,6 +34,12 @@ class order:
             [self.id, self.name, self.quantity, self.allOrNothing, self.buyOrSell, self.price, self.stamp])
         return resultList
 
+    def PrintOrder(self):
+        result = list()
+        result.extend(
+            [self.id, self.name, self.quantity, self.allOrNothing, self.buyOrSell, self.price, self.stamp])
+        print(str(result[0]) + ' ' + str(result[1]) + ' ' + str(result[2]) + ' ' + str(result[3]) + ' ' + str(
+                result[4]) + ' ' + str(result[5]) + ' ' + str(result[6]))
 
 # the random order generator, default arguments are
 def RandomGenerator(self, minOrders=50, maxOrders=100):
