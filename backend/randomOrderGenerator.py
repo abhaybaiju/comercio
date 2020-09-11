@@ -1,6 +1,6 @@
 from datetime import datetime
 import random
-from backend.securityGenerator import equity, equityNames, equityList, GetEquityAttributes, UpdateBatchSize, GetRandomPrice
+from securityGenerator import equity, equityNames, equityList, GetEquityAttributes, UpdateBatchSize, GetRandomPrice
 # default ISIN index
 index = 100000000
 indexLocked = bool(0)
