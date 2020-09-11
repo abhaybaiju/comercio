@@ -1,4 +1,5 @@
 import random
+import math
 
 # the equities list is a predefined list of the names of all the different stocks/companies
 equityNames = list(('Apple', 'Microsoft', 'IBM', 'Xerox', 'Pixar'))
@@ -42,13 +43,13 @@ equityList.append(equity('Pixar', 550, 7, 1))
 
 # function to retrieve the attributes of a particular equity
 def GetEquityAttributes(find):
-    resultlist = list()
+    resultList = list()
     for i in equityList:
         if i.name == find:
-            resultlist.append(i.price)
-            resultlist.append(i.batchSize)
-            resultlist.append(i.trend)
-            return resultlist
+            resultList.append(i.price)
+            resultList.append(i.batchSize)
+            resultList.append(i.trend)
+            return resultList
 
 
 # function to decrement the batch size of the equity when a new order is generated
@@ -65,3 +66,15 @@ def UpdateEquityPrice(find, newPrice):
         if i.name == find:
             i.UpdatePrice(newPrice)
             break
+
+def GetRandomPrice(find):
+    for i in equityList:
+        if i.name == find:
+            minLimit = 0.9 * i.price
+            maxLimit = 1.1 * i.price
+            m = math.ceil(minLimit / 0.05)
+            n = math.floor(maxLimit / 0.05)
+            resultPrice = (random.randint(m, n) * 0.05)
+            resultPrice = float("{:.2f}".format(resultPrice))
+            return resultPrice
+
