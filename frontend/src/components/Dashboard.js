@@ -22,6 +22,7 @@ import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
+import Orderform from './Orderform';
 
 function Copyright() {
     const [currentTime, setCurrentTime] = useState("");
@@ -122,7 +123,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -175,17 +176,13 @@ export default function Dashboard() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
+          <Grid container justify="space-around" spacing={1}>
+            {/*Left Grid*/}
+          <Grid container item spacing={1} justify="space-around" lg={8} >
             {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
+            <Grid item xs={12} md={8} lg={12}>
               <Paper className={fixedHeightPaper}>
                 <Chart />
-              </Paper>
-            </Grid>
-            {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <Deposits />
               </Paper>
             </Grid>
             {/* Recent Orders */}
@@ -193,6 +190,20 @@ export default function Dashboard() {
               <Paper className={classes.paper}>
                 <Orders />
               </Paper>
+            </Grid>
+          </Grid>
+          {/*Right Grid*/}
+            <Grid item container spacing={1} justify="space-evenly" lg={4}>
+              <Grid item lg={12}><Paper className={classes.paper} style={{height : 360}}>
+                    <Orderform />
+                  </Paper>
+              </Grid>
+              {/* Recent Deposits */}
+              <Grid item xs={12} md={4} lg={12}>
+                  <Paper className={fixedHeightPaper}>
+                    <Deposits />
+                  </Paper>
+                </Grid>
             </Grid>
           </Grid>
           <Box pt={4}>
