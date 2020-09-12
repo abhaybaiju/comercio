@@ -1,0 +1,32 @@
+CREATE TABLE "Order_Index" (
+	"id"	TEXT,
+	"ISIN"	TEXT NOT NULL,
+	"price"	INTEGER NOT NULL,
+	"qty"	INTEGER NOT NULL,
+	"aon"	TEXT NOT NULL,
+	"identifier"	INTEGER NOT NULL DEFAULT 0,
+	"BOS"	TEXT NOT NULL DEFAULT 'b',
+	"LOM"	TEXT,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("ISIN") REFERENCES "Securities_Index"("ISIN")
+
+CREATE TABLE "Rejected_Order" (
+	"sr_no"	INTEGER,
+	"ISIN"	TEXT NOT NULL,
+	"price"	INTEGER NOT NULL,
+	"BOS"	TEXT NOT NULL,
+	"qty"	INTEGER NOT NULL,
+	"aon"	TEXT NOT NULL,
+	"LOM"	TEXT NOT NULL,
+	FOREIGN KEY("ISIN") REFERENCES "Securities_Index"("ISIN"),
+	PRIMARY KEY("sr_no" AUTOINCREMENT)
+);
+
+CREATE TABLE "Securities_Index" (
+	"ISIN"	NUMERIC,
+	"name"	INTEGER NOT NULL,
+	"type"	TEXT NOT NULL,
+	"ltprice"	INTEGER,
+	PRIMARY KEY("name")
+);
+
