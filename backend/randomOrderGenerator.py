@@ -67,9 +67,11 @@ def RandomGenerator(self, minOrders=50, maxOrders=100):
 
     for i in range(0, numberOfOrders):
         index += 1
-        orderID = index
-        orderName = equityNames[random.randint(0, (len(equityNames) - 1))]
-        orderQuantity = random.randint(1, 200)
+        orderID = str(index)
+        # orderName = equityNames[random.randint(0, (len(equityNames) - 1))]
+        orderName = 'Microsoft'
+        # orderQuantity = random.randint(1, 200)
+        orderQuantity = random.choice([100, 200])
         orderAON = bool(random.getrandbits(1))
         orderBOS = bool(random.getrandbits(1))
         if (random.getrandbits(1)):
@@ -96,6 +98,8 @@ def RandomGenerator(self, minOrders=50, maxOrders=100):
         UpdateBatchSize(orderName)
 
     indexLocked = 0
+    ordersDf.columns = ['id', 'name', 'quantity', 'AON', 'BOS', 'LOM', 'price', 'timestamp']
+    return ordersDf
 
 
 # prints the order details from the two order list
@@ -118,20 +122,18 @@ def PrintOrderDetails():
     #     #     print(str(result[0]) + ' ' + str(result[1]) + ' ' + str(result[2]) + ' ' + str(result[3]) + ' ' + str(
     #     #         result[4]) + ' ' + str(result[5]) + ' ' + str(result[6]))
     #     print(sellDf)
-    #     print('*****')\
+    #     print('*****')
     print(ordersDf)
     print('*****')
 
-def NewFunc(x):
+def RetrieveSorted(buyOrSell):
     global ordersDf
-    # print(ordersDf[4])
-    ordersDf[4] = ordersDf[4].astype(str)
-    print('*****')
-    # 0 is for
-    if x == 0:
-        # tempDf = ordersDf.filter(like='b', axis=0)
-        sudoDf = (ordersDf.loc[(ordersDf[4].isin(['b'])) & (ordersDf[5].isin(['l']))])
-        print(sudoDf.sort_values(by=[6]))
-
-
-RandomGenerator(100, 200)
+    # 0 is for buy order, 1 is for sell order
+    if buyOrSell == 0:
+        tempDf = (ordersDf.loc[(ordersDf[4].isin(['s'])) & (ordersDf[5].isin(['l']))])
+        tempDf = tempDf.sort_values(by=[6], ascending=True)
+        return tempDf
+    elif buyOrSell == 1:
+        tempDf = (ordersDf.loc[(ordersDf[4].isin(['b'])) & (ordersDf[5].isin(['l']))])
+        tempDf = tempDf.sort_values(by=[6], ascending=False)
+        return tempDf
