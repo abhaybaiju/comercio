@@ -1,6 +1,8 @@
 import random
 from datetime import datetime
 
+import pandas as pd
+
 from backend.securityGenerator import equityNames, UpdateBatchSize, GetRandomPrice
 
 # default ISIN index
@@ -10,9 +12,13 @@ index = 100000000
 indexLocked = bool(0)
 
 # separate lists that contain order objects
-buyOrdersList = list()
-sellOrdersList = list()
+# buyOrdersList = list()
+# sellOrdersList = list()
 
+# buyDf = pd.DataFrame(columns=['id', 'name', 'AON', 'BOS', 'price', 'stamp'])
+# buyDf = pd.DataFrame()
+# sellDf = pd.DataFrame()
+ordersDf = pd.DataFrame()
 
 # the price doubles up as the market/limit order indicator
 # if the price is 0, the order is a market order, else it is a limit order
@@ -39,7 +45,8 @@ class order:
         result.extend(
             [self.id, self.name, self.quantity, self.allOrNothing, self.buyOrSell, self.price, self.stamp])
         print(str(result[0]) + ' ' + str(result[1]) + ' ' + str(result[2]) + ' ' + str(result[3]) + ' ' + str(
-                result[4]) + ' ' + str(result[5]) + ' ' + str(result[6]))
+            result[4]) + ' ' + str(result[5]) + ' ' + str(result[6]))
+
 
 # the random order generator, default arguments are
 def RandomGenerator(self, minOrders=50, maxOrders=100):
@@ -53,7 +60,7 @@ def RandomGenerator(self, minOrders=50, maxOrders=100):
 
     numberOfOrders = random.randint(minOrders, maxOrders)
 
-    global index, indexLocked, buyOrdersList, sellOrdersList
+    global index, indexLocked, buyOrdersList, sellOrdersList, ordersDf
 
     # locking the index
     indexLocked = 1
@@ -67,41 +74,63 @@ def RandomGenerator(self, minOrders=50, maxOrders=100):
         orderBOS = bool(random.getrandbits(1))
         if (random.getrandbits(1)):
             orderPrice = GetRandomPrice(orderName)
+            orderLOM = 'l'
         else:
             orderPrice = 0
+            orderLOM = 'm'
 
         if (orderBOS == 0):
-            buyOrdersList.append(order(orderID, orderName, orderQuantity, orderAON, orderBOS, orderPrice))
+            # buyOrdersList.append(order(orderID, orderName, orderQuantity, orderAON, orderBOS, orderPrice))
+            temp = pd.Series([orderID, orderName, orderQuantity, orderAON, 'b', orderLOM, orderPrice, datetime.now()])
+            # print(temp)
+            # buyDf = buyDf.append(temp, ignore_index=True)
+            ordersDf = ordersDf.append(temp, ignore_index=True)
+            # print('*****')
         else:
-            sellOrdersList.append(order(orderID, orderName, orderQuantity, orderAON, orderBOS, orderPrice))
+            # sellOrdersList.append(order(orderID, orderName, orderQuantity, orderAON, orderBOS, orderPrice))
+            temp = pd.Series([orderID, orderName, orderQuantity, orderAON, 's', orderLOM, orderPrice, datetime.now()])
+            # print(temp)
+            # sellDf = sellDf.append(temp, ignore_index=True)
+            ordersDf = ordersDf.append(temp, ignore_index=True)
+            # print('*****')
         UpdateBatchSize(orderName)
 
     indexLocked = 0
 
 
-RandomGenerator(100, 200)
-print(len(buyOrdersList))
-print(len(sellOrdersList))
-
-
 # prints the order details from the two order list
 # argument 0 is for the buy list and 1 for the sell list
-def PrintOrderDetails(x):
-    global buyOrdersList, sellOrdersList
+def PrintOrderDetails():
+    global buyOrdersList, sellOrdersList, buyDf, sellDf, ordersDf
 
+    # if x == 0:
+    #     print('Printing the buy orders:')
+    #     # for i in buyOrdersList:
+    #     #     result = i.RetrieveOrderAttributes()
+    #     #     print(str(result[0]) + ' ' + str(result[1]) + ' ' + str(result[2]) + ' ' + str(result[3]) + ' ' + str(
+    #     #         result[4]) + ' ' + str(result[5]) + ' ' + str(result[6]))
+    #     print(buyDf)
+    #     print('*****')
+    # else:
+    #     print('Printing the sell orders:')
+    #     # for i in sellOrdersList:
+    #     #     result = i.RetrieveOrderAttributes()
+    #     #     print(str(result[0]) + ' ' + str(result[1]) + ' ' + str(result[2]) + ' ' + str(result[3]) + ' ' + str(
+    #     #         result[4]) + ' ' + str(result[5]) + ' ' + str(result[6]))
+    #     print(sellDf)
+    #     print('*****')\
+    print(ordersDf)
+    print('*****')
+
+def NewFunc(x):
+    global ordersDf
+    # print(ordersDf[4])
+    ordersDf[4] = ordersDf[4].astype(str)
+    print('*****')
+    # 0 is for
     if x == 0:
-        print('Printing the buy orders:')
-        for i in buyOrdersList:
-            result = i.RetrieveOrderAttributes()
-            print(str(result[0]) + ' ' + str(result[1]) + ' ' + str(result[2]) + ' ' + str(result[3]) + ' ' + str(
-                result[4]) + ' ' + str(result[5]) + ' ' + str(result[6]))
-    else:
-        print('Printing the sell orders:')
-        for i in sellOrdersList:
-            result = i.RetrieveOrderAttributes()
-            print(str(result[0]) + ' ' + str(result[1]) + ' ' + str(result[2]) + ' ' + str(result[3]) + ' ' + str(
-                result[4]) + ' ' + str(result[5]) + ' ' + str(result[6]))
+        # tempDf = ordersDf.filter(like='b', axis=0)
+        print(ordersDf.loc[(ordersDf[4].isin(['b'])) & (ordersDf[5].isin(['l']))])
 
 
-PrintOrderDetails(0)
-PrintOrderDetails(1)
+RandomGenerator(100, 200)
