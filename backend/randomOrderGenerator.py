@@ -130,10 +130,12 @@ def RetrieveSorted(buyOrSell):
     global ordersDf
     # 0 is for buy order, 1 is for sell order
     if buyOrSell == 0:
-        tempDf = (ordersDf.loc[(ordersDf[4].isin(['s'])) & (ordersDf[5].isin(['l']))])
-        tempDf = tempDf.sort_values(by=[6], ascending=True)
+        # tempDf = (ordersDf.loc[(ordersDf[4].isin(['s'])) & (ordersDf[5].isin(['l']))])
+        tempDf = ordersDf[(ordersDf.BOS == 's') & (ordersDf.LOM == 'l')]
+        tempDf = tempDf.sort_values(by=['price'], ascending=True)
         return tempDf
     elif buyOrSell == 1:
-        tempDf = (ordersDf.loc[(ordersDf[4].isin(['b'])) & (ordersDf[5].isin(['l']))])
-        tempDf = tempDf.sort_values(by=[6], ascending=False)
+        # tempDf = (ordersDf.loc[(ordersDf[4].isin(['b'])) & (ordersDf[5].isin(['l']))])
+        tempDf = ordersDf[(ordersDf.BOS == 's') & (ordersDf.LOM == 'l')]
+        tempDf = tempDf.sort_values(by=['price'], ascending=False)
         return tempDf

@@ -12,43 +12,57 @@ def OrderMatching():
     ordersDf = RandomGenerator(100, 200)
     # print('look at this')
     # print(ordersDf[ordersDf.LOM == 'l'])
-    # print('*****')
+    # print('*****')'
     for srno, i in ordersDf.iterrows():
         if (i.iloc[4] == 's' and i.iloc[5] == 'l'):
+            loop = True
             for sr, j in ordersDf[ordersDf.BOS != 's'].iterrows():
-                if j.iloc[6] >= i.iloc[6] and i.iloc[1] == j.iloc[1]:
+                if loop == False:
+                    break
+                elif j.iloc[6] >= i.iloc[6] and i.iloc[1] == j.iloc[1]:
+                    if i.iloc[2] == j.iloc[2]:
+                        print('before')
+                        print(len(ordersDf.index))
+                        # ordersDf = ordersDf[(ordersDf.id != str(i.iloc[0])) & (ordersDf.id != str(j.iloc[0]))]
+                        ordersDf = ordersDf[ordersDf.id != str(i.iloc[0])]
+                        print('after i')
+                        print(len(ordersDf.index))
+                        ordersDf = ordersDf[ordersDf.id != str(j.iloc[0])]
+                        print('after j')
+                        print(len(ordersDf.index))
+                        print('s l order executed')
+                        loop = False
+                        break
+        if (i.iloc[4] == 's' and i.iloc[5] == 'm'):
+            loop = True
+            tempDf = RetrieveSorted(0)
+            for sr, j in tempDf.iterrows():
+                if loop == False:
+                    break
+                if (str(i.iloc[2]) == str(j.iloc[2])) and (str(i.iloc[1]) == str(j.iloc[1])):
+                    ordersDf = ordersDf[(ordersDf.id != str(i.iloc[0])) & (ordersDf.id != str(j.iloc[0]))]
+                    print('s m executed')
+                    loop = False
+                    break
+        if (i.iloc[4] == 'b' and i.iloc[5] == 'l'):
+            loop = True
+            for sr, j in ordersDf[ordersDf.BOS != 'b'].iterrows():
+                if loop == False:
+                    break
+                if j.iloc[6] <= i.iloc[6] and i.iloc[1] == j.iloc[1]:
                     if i.iloc[2] == j.iloc[2]:
                         ordersDf = ordersDf[(ordersDf.id != str(i.iloc[0])) & (ordersDf.id != str(j.iloc[0]))]
-                        print('s l order executed')
-        # if (i.iloc[4] == 's' and i.iloc[5] == 'm'):
-        #     tempDf = RetrieveSorted(0)
-        #     for sr, j in tempDf.iterrows():
-        #             if i.iloc[2] == j.iloc[2]:
-        #                 ordersDf = ordersDf.drop(ordersDf.id == [i.iloc[0], j.iloc[0]].index, inplace=True)
-        #                 # print('trade executed')
-        #                 # print('buy order:')
-        #                 # print(i)
-        #                 # print('sell order:')
-        #                 # print(j)
-        # if i.iloc[4] == 'b' and i.iloc[5] == 'l':
-        #     for sr, j in ordersDf.loc[(ordersDf[4].isin(['s']))].iterrows():
-        #         if j.iloc[6] <= i.iloc[6]:
-        #             if i.iloc[2] == j.iloc[2]:
-        #                 ordersDf = ordersDf.drop(ordersDf.id == [i.iloc[0], j.iloc[0]].index, inplace=True)
-        #                 # print('trade executed')
-        #                 # print('buy order:')
-        #                 # print(j)
-        #                 # print('sell order:')
-        #                 # print(i)
-        # if i.iloc[4] == 'b' and i.iloc[5] == 'm':
-        #     tempDf = RetrieveSorted(1)
-        #     for sr, j in tempDf.iterrows():
-        #         if j.iloc[6] <= i.iloc[6]:
-        #             if i.iloc[2] == j.iloc[2]:
-        #                 ordersDf = ordersDf.drop(ordersDf.id == [i.iloc[0], j.iloc[0]].index, inplace=True)
-        #                 # print('trade executed')
-        #                 # print('buy order:')
-        #                 # print(i)
-        #                 # print('sell order:')
-        #                 # print(j)
-    # print(ordersDf)
+                        print('b l order executed')
+                        loop = False
+                        break
+        if (i.iloc[4] == 'b' and i.iloc[5] == 'm'):
+            tempDf = RetrieveSorted(1)
+            loop = True
+            for sr, j in tempDf.iterrows():
+                if loop == False:
+                    break
+                if (str(i.iloc[2]) == str(j.iloc[2])) and (str(i.iloc[1]) == str(j.iloc[1])):
+                    ordersDf = ordersDf[(ordersDf.id != str(i.iloc[0])) & (ordersDf.id != str(j.iloc[0]))]
+                    print('b m executed')
+                    loop = False
+                    break
