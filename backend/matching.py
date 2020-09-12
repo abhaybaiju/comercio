@@ -14,21 +14,12 @@ def OrderMatching():
     # print(ordersDf[ordersDf.LOM == 'l'])
     # print('*****')
     for srno, i in ordersDf.iterrows():
-        print(len(ordersDf.index))
-        # ordersDf = ordersDf.drop((ordersDf.id == str(i.iloc[0])).index, inplace=True)
-        ordersDf = ordersDf[ordersDf.id != str(i.iloc[0])]
-        print(len(ordersDf.index))
-        # if (i.iloc[4] == 's' and i.iloc[5] == 'l'):
-        #     for sr, j in ordersDf.loc[(ordersDf[4].isin(['b']))].iterrows():
-        #         if j.iloc[6] >= i.iloc[6] and i.iloc[1] == j.iloc[1]:
-        #             if i.iloc[2] == j.iloc[2]:
-        #                 ordersDf = ordersDf.drop(ordersDf.id == [i.iloc[0], j.iloc[0]].index, inplace=True)
-        #                 # indexNames = dfObj[dfObj['Age'] == 30].index
-        #                 # print('trade executed')
-        #                 # print('buy order:')
-        #                 # print(j)
-        #                 # print('sell order:')
-        #                 # print(i)
+        if (i.iloc[4] == 's' and i.iloc[5] == 'l'):
+            for sr, j in ordersDf[ordersDf.BOS != 's'].iterrows():
+                if j.iloc[6] >= i.iloc[6] and i.iloc[1] == j.iloc[1]:
+                    if i.iloc[2] == j.iloc[2]:
+                        ordersDf = ordersDf[(ordersDf.id != str(i.iloc[0])) & (ordersDf.id != str(j.iloc[0]))]
+                        print('s l order executed')
         # if (i.iloc[4] == 's' and i.iloc[5] == 'm'):
         #     tempDf = RetrieveSorted(0)
         #     for sr, j in tempDf.iterrows():
