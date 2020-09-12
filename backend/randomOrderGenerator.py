@@ -130,7 +130,8 @@ def NewFunc(x):
     # 0 is for
     if x == 0:
         # tempDf = ordersDf.filter(like='b', axis=0)
-        print(ordersDf.loc[(ordersDf[4].isin(['b'])) & (ordersDf[5].isin(['l']))])
+        sudoDf = (ordersDf.loc[(ordersDf[4].isin(['b'])) & (ordersDf[5].isin(['l']))])
+        print(sudoDf.sort_values(by=[6]))
 
 
 RandomGenerator(100, 200)
