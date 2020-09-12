@@ -3,6 +3,7 @@ import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Title from './Title';
+import axios from 'axios';
 
 function preventDefault(event) {
   event.preventDefault();
@@ -16,14 +17,23 @@ const useStyles = makeStyles({
 
 export default function Deposits() {
   const classes = useStyles();
+
+  axios.get('/user')
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+
   return (
     <React.Fragment>
-      <Title>Recent Deposits</Title>
+      <Title>Your Investments</Title>
       <Typography component="p" variant="h4">
         $3,024.00
       </Typography>
       <Typography color="textSecondary" className={classes.depositContext}>
-        on 10 Sep, 2020
+        on 12 Sep, 2020
       </Typography>
       <div>
         <Link color="primary" href="#" onClick={preventDefault}>

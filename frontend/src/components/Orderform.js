@@ -64,7 +64,7 @@ export default function Orderform() {
         <TextField margin="normal" id="outlined-basic" label="Price" variant="outlined" />      
           </Grid>
           <Button variant="contained" color="primary">
-            Place Order
+            Buy
           </Button>
       </TabPanel>
       <TabPanel value = {value} index={1}>
@@ -73,7 +73,7 @@ export default function Orderform() {
         <TextField margin="normal" id="outlined-basic" label="Price" variant="outlined" />
           </Grid>
           <Button variant="contained" color="primary">
-            Place Order
+            Sell
           </Button>
       </TabPanel>
   </SwipeableViews>
