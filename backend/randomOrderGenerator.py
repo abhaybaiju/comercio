@@ -7,7 +7,7 @@ from backend.securityGenerator import equityNames, UpdateBatchSize, GetRandomPri
 
 # default ISIN index
 # for each new day the order would be X00000000 where X is the number of the day
-index = 100000000
+index = 0
 # variable that locks off any changes to the index during random order generation
 indexLocked = bool(0)
 
@@ -19,6 +19,7 @@ indexLocked = bool(0)
 # buyDf = pd.DataFrame()
 # sellDf = pd.DataFrame()
 ordersDf = pd.DataFrame()
+ordersList = list()
 
 # the price doubles up as the market/limit order indicator
 # if the price is 0, the order is a market order, else it is a limit order
@@ -60,7 +61,7 @@ def RandomGenerator(self, minOrders=50, maxOrders=100):
 
     # numberOfOrders = random.randint(minOrders, maxOrders)
     numberOfOrders = 100
-    global index, indexLocked, buyOrdersList, sellOrdersList, ordersDf
+    global index, indexLocked, buyOrdersList, sellOrdersList, ordersDf, ordersList
 
     # locking the index
     indexLocked = 1
@@ -68,8 +69,8 @@ def RandomGenerator(self, minOrders=50, maxOrders=100):
     for i in range(0, numberOfOrders):
         index += 1
         orderID = str(index)
-        # orderName = equityNames[random.randint(0, (len(equityNames) - 1))]
-        orderName = 'Microsoft'
+        orderName = equityNames[random.randint(0, (len(equityNames) - 1))]
+        # orderName = 'Microsoft'
         # orderQuantity = random.randint(1, 200)
         orderQuantity = random.choice([100, 200])
         orderAON = bool(random.getrandbits(1))
@@ -86,20 +87,22 @@ def RandomGenerator(self, minOrders=50, maxOrders=100):
             temp = pd.Series([orderID, orderName, orderQuantity, orderAON, 'b', orderLOM, orderPrice, datetime.now(), 0])
             # print(temp)
             # buyDf = buyDf.append(temp, ignore_index=True)
-            ordersDf = ordersDf.append(temp, ignore_index=True)
+            # ordersDf = ordersDf.append(temp, ignore_index=True)
+            ordersList.append([orderID, orderName, orderQuantity, orderAON, 'b', orderLOM, orderPrice, datetime.now(), 0])
             # print('*****')
         else:
             # sellOrdersList.append(order(orderID, orderName, orderQuantity, orderAON, orderBOS, orderPrice))
             temp = pd.Series([orderID, orderName, orderQuantity, orderAON, 's', orderLOM, orderPrice, datetime.now(), 0])
             # print(temp)
             # sellDf = sellDf.append(temp, ignore_index=True)
-            ordersDf = ordersDf.append(temp, ignore_index=True)
+            # ordersDf = ordersDf.append(temp, ignore_index=True)
+            ordersList.append([orderID, orderName, orderQuantity, orderAON, 's', orderLOM, orderPrice, datetime.now(), 0])
             # print('*****')
         UpdateBatchSize(orderName)
 
     indexLocked = 0
-    ordersDf.columns = ['id', 'name', 'quantity', 'AON', 'BOS', 'LOM', 'price', 'timestamp', 'done']
-    return ordersDf
+    # ordersDf.columns = ['id', 'name', 'quantity', 'AON', 'BOS', 'LOM', 'price', 'timestamp', 'done']
+    return ordersList
 
 
 # prints the order details from the two order list
