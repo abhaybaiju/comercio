@@ -27,17 +27,18 @@ def OrderMatching():
                     if j.iloc[6] >= i.iloc[6] and i.iloc[1] == j.iloc[1]:
                         if i.iloc[2] == j.iloc[2]:
                             # ordersDf = ordersDf[(ordersDf.id != str(i.iloc[0])) & (ordersDf.id != str(j.iloc[0]))]
+                            ordersDf = Del(ordersDf, i, j)
                             # ordersDf = ordersDf[ordersDf.id != str(i.iloc[0])]
                             # time.sleep(0.25)
                             # ordersDf = ordersDf[ordersDf.id != str(j.iloc[0])]
                             # ordersDf = ordersDf[~ordersDf.index.isin(dfIndex.get_loc(ordersDf.id == str(i.iloc[0])))]
-                            ordersDf = ordersDf[~ordersDf.index.isin([3])]
-                            time.sleep(3)
+                            # ordersDf = ordersDf[~ordersDf.index.isin([3])]
+                            # time.sleep(3)
                             # ordersDf = ordersDf[~(ordersDf.id == str(j.iloc[0]))]
                             # ordersDf = ordersDf[~ordersDf.index.isin(dfIndex.get_loc(ordersDf.id == str(j.iloc[0])))]
-                            ordersDf = ordersDf[~ordersDf.index.isin([4])]
+                            # ordersDf = ordersDf[~ordersDf.index.isin([4])]
 
-                            time.sleep(3)
+                            # time.sleep(3)
                             print('s l order executed')
                             count=count+1
                             # loop = False
@@ -76,3 +77,7 @@ def OrderMatching():
             #             loop = False
             #             break
     print('orders executed '+str(count))
+
+def Del(ordersDf, i, j):
+    tempDf = ordersDf[(ordersDf.id != str(i.iloc[0])) & (ordersDf.id != str(j.iloc[0]))]
+    return tempDf
