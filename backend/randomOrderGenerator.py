@@ -58,8 +58,8 @@ def RandomGenerator(self, minOrders=50, maxOrders=100):
         minOrders = 50
         maxOrders = 100
 
-    numberOfOrders = random.randint(minOrders, maxOrders)
-
+    # numberOfOrders = random.randint(minOrders, maxOrders)
+    numberOfOrders = 100
     global index, indexLocked, buyOrdersList, sellOrdersList, ordersDf
 
     # locking the index
@@ -83,14 +83,14 @@ def RandomGenerator(self, minOrders=50, maxOrders=100):
 
         if (orderBOS == 0):
             # buyOrdersList.append(order(orderID, orderName, orderQuantity, orderAON, orderBOS, orderPrice))
-            temp = pd.Series([orderID, orderName, orderQuantity, orderAON, 'b', orderLOM, orderPrice, datetime.now()])
+            temp = pd.Series([orderID, orderName, orderQuantity, orderAON, 'b', orderLOM, orderPrice, datetime.now(), 0])
             # print(temp)
             # buyDf = buyDf.append(temp, ignore_index=True)
             ordersDf = ordersDf.append(temp, ignore_index=True)
             # print('*****')
         else:
             # sellOrdersList.append(order(orderID, orderName, orderQuantity, orderAON, orderBOS, orderPrice))
-            temp = pd.Series([orderID, orderName, orderQuantity, orderAON, 's', orderLOM, orderPrice, datetime.now()])
+            temp = pd.Series([orderID, orderName, orderQuantity, orderAON, 's', orderLOM, orderPrice, datetime.now(), 0])
             # print(temp)
             # sellDf = sellDf.append(temp, ignore_index=True)
             ordersDf = ordersDf.append(temp, ignore_index=True)
@@ -98,7 +98,7 @@ def RandomGenerator(self, minOrders=50, maxOrders=100):
         UpdateBatchSize(orderName)
 
     indexLocked = 0
-    ordersDf.columns = ['id', 'name', 'quantity', 'AON', 'BOS', 'LOM', 'price', 'timestamp']
+    ordersDf.columns = ['id', 'name', 'quantity', 'AON', 'BOS', 'LOM', 'price', 'timestamp', 'done']
     return ordersDf
 
 
