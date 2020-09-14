@@ -1,34 +1,59 @@
-import React from 'react';
+import React,{ useEffect, useState } from 'react';
 import { useTheme } from '@material-ui/core/styles';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer,Tooltip} from 'recharts';
 import Title from './Title';
+import axios from 'axios';
+
 
 // Generate Sales Data
-function createData(time, amount) {
-  return { time, amount };
-}
 
-const data = [
-  createData('00:00', 0),
-  createData('03:00', 300),
-  createData('06:00', 600),
-  createData('09:00', 800),
-  createData('12:00', 1500),
-  createData('15:00', 2000),
-  createData('18:00', 2400),
-  createData('21:00', 2300),
-  createData('24:00', undefined),
-];
 
 export default function Chart() {
   const theme = useTheme();
+
+  function createData(time, amount) {
+    return { time, amount };
+  }
+  
+  const data = [
+    createData('00:00', 0),
+    createData('03:00', 300),
+    createData('06:00', 600),
+    createData('09:00', 800),
+    createData('12:00', 1500),
+    createData('15:00', 2000),
+    createData('18:00', 2400),
+    createData('21:00', 2300),
+    createData('24:00', undefined),
+  ];
+
+
+  const [rows,setRows] = useState([]);
+
+  useEffect(() => {
+    function createData(BOS, LOM, Order_isin, aon, identifier, price, qty) {
+      setRows(rows => [{ "time":'03:00', "amount":price}, ...rows,])
+    }
+    const id = setInterval(() => {
+    axios.get('/orders').then(resp => {
+      
+    resp.data.map((row)=> createData(row.BOS,row.LOM,row.Order_isin,row.aon,row.identifier,row.price,row.qty))
+    console.log("Fetching chart",resp.data); 
+    });}
+    , 1000);
+    return () => clearInterval(id);  
+  }, []);
+  
+  
+  console.log("Chart ROWS",rows)
+
 
   return (
     <React.Fragment>
       <Title>Today</Title>
       <ResponsiveContainer>
         <LineChart
-          data={data}
+          data={rows}
           margin={{
             top: 16,
             right: 16,
@@ -36,7 +61,6 @@ export default function Chart() {
             left: 24,
           }}
         >
-          <XAxis dataKey="time" stroke={theme.palette.text.secondary} />
           <YAxis stroke={theme.palette.text.secondary}>
             <Label
               angle={270}
@@ -46,7 +70,8 @@ export default function Chart() {
               Price ($)
             </Label>
           </YAxis>
-          <Line type="monotone" dataKey="amount" stroke={theme.palette.primary.main} dot={false} />
+          <Line type="monotone" dataKey="amount" stroke={theme.palette.primary.main} dot={true} />
+          <Tooltip/>
         </LineChart>
       </ResponsiveContainer>
     </React.Fragment>

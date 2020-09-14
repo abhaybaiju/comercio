@@ -18,14 +18,6 @@ const useStyles = makeStyles({
 export default function Deposits() {
   const classes = useStyles();
 
-  axios.get('/user')
-      .then(res => {
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-
   return (
     <React.Fragment>
       <Title>Your Investments</Title>

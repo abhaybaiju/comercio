@@ -26,16 +26,16 @@ import Orderform from './Orderform';
 
 function Copyright() {
     const [currentTime, setCurrentTime] = useState("");
-    useEffect(() => {
+    /*useEffect(() => {
         fetch('/time').then(res => res.json()).then(data => {
           setCurrentTime(data.time);
         });
       }, [currentTime]);
       var d = new Date(0);
-  d.setUTCSeconds(currentTime);
+  d.setUTCSeconds(currentTime);*/
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {d.toLocaleTimeString()}
+      {/*d.toLocaleTimeString()*/}
     </Typography>
   );
 }
@@ -147,7 +147,7 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
+            My Portfolio
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -194,7 +194,7 @@ export default function Dashboard() {
           </Grid>
           {/*Right Grid*/}
             <Grid item container spacing={1} justify="space-evenly" lg={4}>
-              <Grid item lg={12}><Paper className={classes.paper} style={{height : 360}}>
+              <Grid item lg={12}><Paper className={classes.paper} style={{height : 450}}>
                     <Orderform />
                   </Paper>
               </Grid>
