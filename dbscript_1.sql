@@ -24,10 +24,10 @@ CREATE TABLE "Rejected_Order" (
 );
 
 CREATE TABLE "Securities_Index" (
-	"ISIN"	NUMERIC,
-	"name"	INTEGER NOT NULL,
+	"ISIN"	TEXT,
+	"name"	TEXT NOT NULL,
 	"type"	TEXT NOT NULL,
-	"ltprice"	INTEGER,
+	"ltprice" INTEGER,
 	PRIMARY KEY("name")
 );
 
