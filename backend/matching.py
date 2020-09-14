@@ -54,17 +54,17 @@ def OrderMatching():
             #             print('s m executed')
             #             loop = False
             #             break
-            # elif (i.iloc[4] == 'b' and i.iloc[5] == 'l'):
-            #     loop = True
-            #     for sr, j in ordersDf[ordersDf.BOS != 'b'].iterrows():
-            #         if loop == False:
-            #             break
-            #         if j.iloc[6] <= i.iloc[6] and i.iloc[1] == j.iloc[1]:
-            #             if i.iloc[2] == j.iloc[2]:
-            #                 ordersDf = ordersDf[(ordersDf.id != str(i.iloc[0])) & (ordersDf.id != str(j.iloc[0]))]
-            #                 print('b l order executed')
-            #                 loop = False
-            #                 break
+            elif (i.iloc[4] == 'b' and i.iloc[5] == 'l'):
+                loop = True
+                for sr, j in ordersDf[ordersDf.BOS != 'b'].iterrows():
+                    if loop == False:
+                        break
+                    if j.iloc[6] <= i.iloc[6] and i.iloc[1] == j.iloc[1]:
+                        if i.iloc[2] == j.iloc[2]:
+                            ordersDf = ordersDf[(ordersDf.id != str(i.iloc[0])) & (ordersDf.id != str(j.iloc[0]))]
+                            print('b l order executed')
+                            loop = False
+                            break
             # elif (i.iloc[4] == 'b' and i.iloc[5] == 'm'):
             #     tempDf = RetrieveSorted(1)
             #     loop = True
