@@ -71,8 +71,7 @@ def RandomGenerator(self, minOrders=50, maxOrders=100):
         orderID = str(index)
         orderName = equityNames[random.randint(0, (len(equityNames) - 1))]
         # orderName = 'Microsoft'
-        # orderQuantity = random.randint(1, 200)
-        orderQuantity = random.choice([100, 200])
+        orderQuantity = random.randint(1, 200)
         orderAON = bool(random.getrandbits(1))
         orderBOS = bool(random.getrandbits(1))
         if (random.getrandbits(1)):
@@ -84,19 +83,19 @@ def RandomGenerator(self, minOrders=50, maxOrders=100):
 
         if (orderBOS == 0):
             # buyOrdersList.append(order(orderID, orderName, orderQuantity, orderAON, orderBOS, orderPrice))
-            temp = pd.Series([orderID, orderName, orderQuantity, orderAON, 'b', orderLOM, orderPrice, datetime.now(), 0])
+            # temp = pd.Series([orderID, orderName, orderQuantity, orderAON, 'b', orderLOM, orderPrice, datetime.now(), 0])
             # print(temp)
             # buyDf = buyDf.append(temp, ignore_index=True)
             # ordersDf = ordersDf.append(temp, ignore_index=True)
-            ordersList.append([orderID, orderName, orderQuantity, orderAON, 'b', orderLOM, orderPrice, datetime.now(), 0])
+            ordersList.append([orderID, orderName, orderQuantity, orderAON, 'b', orderLOM, orderPrice, datetime.now()])
             # print('*****')
         else:
             # sellOrdersList.append(order(orderID, orderName, orderQuantity, orderAON, orderBOS, orderPrice))
-            temp = pd.Series([orderID, orderName, orderQuantity, orderAON, 's', orderLOM, orderPrice, datetime.now(), 0])
+            # temp = pd.Series([orderID, orderName, orderQuantity, orderAON, 's', orderLOM, orderPrice, datetime.now(), 0])
             # print(temp)
             # sellDf = sellDf.append(temp, ignore_index=True)
             # ordersDf = ordersDf.append(temp, ignore_index=True)
-            ordersList.append([orderID, orderName, orderQuantity, orderAON, 's', orderLOM, orderPrice, datetime.now(), 0])
+            ordersList.append([orderID, orderName, orderQuantity, orderAON, 's', orderLOM, orderPrice, datetime.now()])
             # print('*****')
         UpdateBatchSize(orderName)
 
