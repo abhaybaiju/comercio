@@ -87,7 +87,7 @@ def RandomGenerator(self, minOrders=50, maxOrders=100):
             # print(temp)
             # buyDf = buyDf.append(temp, ignore_index=True)
             # ordersDf = ordersDf.append(temp, ignore_index=True)
-            ordersList.append([orderID, orderName, orderQuantity, orderAON, 'b', orderLOM, orderPrice, datetime.now()])
+            ordersList.append([orderID, orderName, orderQuantity, orderAON, 'b', orderLOM, orderPrice, datetime.now(), int(0)])
             # print('*****')
         else:
             # sellOrdersList.append(order(orderID, orderName, orderQuantity, orderAON, orderBOS, orderPrice))
@@ -95,7 +95,7 @@ def RandomGenerator(self, minOrders=50, maxOrders=100):
             # print(temp)
             # sellDf = sellDf.append(temp, ignore_index=True)
             # ordersDf = ordersDf.append(temp, ignore_index=True)
-            ordersList.append([orderID, orderName, orderQuantity, orderAON, 's', orderLOM, orderPrice, datetime.now()])
+            ordersList.append([orderID, orderName, orderQuantity, orderAON, 's', orderLOM, orderPrice, datetime.now(), int(0)])
             # print('*****')
         UpdateBatchSize(orderName)
 
