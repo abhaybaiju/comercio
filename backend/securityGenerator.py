@@ -1,9 +1,8 @@
 import math
 import random
 
-# the equities list is a predefined list of the names of all the different stocks/companies
-# equityNames = list(('Apple', 'Microsoft', 'IBM', 'Xerox', 'Pixar'))
-equityNames = list(('Apple', 'Microsoft'))
+equityNames = list(('Apple', 'Microsoft', 'IBM', 'Xerox', 'Pixar'))
+
 
 # the equities class
 class equity:

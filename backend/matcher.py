@@ -1,12 +1,6 @@
 from operator import itemgetter
-import random
-from datetime import datetime
 
-import pandas as pd
-import time
-
-from backend.securityGenerator import equityNames, UpdateBatchSize, GetRandomPrice
-from backend.randomOrderGenerator import index, indexLocked, RandomGenerator, PrintOrderDetails, RetrieveSorted
+from backend.randomOrderGenerator import RandomGenerator
 
 ordersList = RandomGenerator(100)
 
@@ -15,12 +9,10 @@ def Match():
     global ordersList
     iC = 0
     doneOrders = []
-    offset = 0
-    # ordersSeek = str('')
     index = -1
     last = -1
-    # for iter in range(len(ordersList)):
-    while (True):
+
+    while True:
         index += 1
         i = ordersList[index]
         if ordersList[iC][8] == 0:
