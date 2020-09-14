@@ -9,9 +9,10 @@ CREATE TABLE "Order_Index" (
 	"LOM"	TEXT,
 	PRIMARY KEY("id" ),
 	FOREIGN KEY("ISIN") REFERENCES "Securities_Index"("ISIN")
+);
 
 CREATE TABLE "Rejected_Order" (
-	"sr_no"	INTEGER PRIMARY KEY,
+	"sr_no"	INTEGER,
 	"ISIN"	TEXT NOT NULL,
 	"price"	INTEGER NOT NULL,
 	"BOS"	TEXT NOT NULL,
