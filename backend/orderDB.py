@@ -1,13 +1,12 @@
 import sqlite3
 from sqlite3 import Error
 
-
+conn = None
 def create_connection(db_file):
     """ create a database connection to a SQLite database """
-    conn = None
+    global conn
     try:
         conn = sqlite3.connect(db_file)
-        print(sqlite3.version)
     except Error as e:
         print(e)
     finally:
@@ -16,4 +15,5 @@ def create_connection(db_file):
 
 
 if __name__ == '__main__':
-    create_connection(r"C:\sqlite\db\pythonsqlite.db")
+    create_connection('omsdb.db')
+
