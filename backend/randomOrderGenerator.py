@@ -50,18 +50,10 @@ class order:
 
 
 # the random order generator, default arguments are
-def RandomGenerator(self, minOrders=50, maxOrders=100):
-    if minOrders > maxOrders:
-        t = minOrders
-        minOrders = maxOrders
-        maxOrders = t
-    elif minOrders == maxOrders:
-        minOrders = 50
-        maxOrders = 100
-
-    # numberOfOrders = random.randint(minOrders, maxOrders)
-    numberOfOrders = 100
-    global index, indexLocked, buyOrdersList, sellOrdersList, ordersDf, ordersList
+def RandomGenerator(num):
+    numberOfOrders = num
+    global index, indexLocked, buyOrdersList, sellOrdersList, ordersDf
+    ordersList = []
 
     # locking the index
     indexLocked = 1

@@ -8,16 +8,21 @@ import time
 from backend.securityGenerator import equityNames, UpdateBatchSize, GetRandomPrice
 from backend.randomOrderGenerator import index, indexLocked, RandomGenerator, PrintOrderDetails, RetrieveSorted
 
-ordersList = []
-ordersList = RandomGenerator(100, 200)
+ordersList = RandomGenerator(100)
 
 
 def Match():
     global ordersList
     iC = 0
     doneOrders = []
-
-    for i in ordersList:
+    offset = 0
+    # ordersSeek = str('')
+    index = -1
+    last = -1
+    # for iter in range(len(ordersList)):
+    while (True):
+        index += 1
+        i = ordersList[index]
         if ordersList[iC][8] == 0:
             # s l
             if i[4] == 's' and i[5] == 'l':
@@ -135,8 +140,25 @@ def Match():
                             break
         iC = iC + 1
 
-    for i in ordersList:
-        print(i[8])
+        flag = 0
+
+        for t in doneOrders:
+            for t1 in t:
+                if i[0] == t1:
+                    flag = 1
+                    break
+
+        if flag == 0:
+            last = i[0]
+
+        if (index + 1) % 10 == 0:
+            ordersList = list(filter(lambda x: x[8] != 1, ordersList))
+            newRows = RandomGenerator(10)
+            ordersList.extend(newRows)
+            if last != -1:
+                index = ReturnJC(last) - 1
+            else:
+                index = -1
 
 
 def SortList(ordersL, indexOfList, reverseOrNot):
