@@ -1,18 +1,18 @@
 import random
 from datetime import datetime
 
-from backend.securityGenerator import equityNames, UpdateBatchSize, GetRandomPrice
+from backend.securityGenerator import equityNames, UpdateBatchSize, GetRandomPrice, CreateEquityList
 
 index = 0
 # variable that locks off any changes to the index during random order generation
 indexLocked = bool(0)
 
 ordersList = list()
-
+CreateEquityList()
 
 def RandomGenerator(num):
     numberOfOrders = num
-    global index, indexLocked, buyOrdersList, sellOrdersList, ordersDf
+    global index, indexLocked, buyOrdersList, sellOrdersList, ordersDf, eq
     ordersList = []
 
     # locking the index
@@ -42,3 +42,7 @@ def RandomGenerator(num):
 
     indexLocked = 0
     return ordersList
+
+
+if __name__ == '__main__':
+    print('main rog')

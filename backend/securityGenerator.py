@@ -36,12 +36,16 @@ equityCursor = conn.cursor()
 
 # creating the list of the equity objects
 def CreateEquityList():
-    global conn, equityList
-    equityList.append(equity('Apple', 700, 5, 1, 'APPLE1984'))
-    equityList.append(equity('Microsoft', 500, 4, 1, 'MIC1990'))
-    equityList.append(equity('IBM', 350, 5, 0, 'IBM1950'))
-    equityList.append(equity('Xerox', 200, 3, 0, 'XER1960'))
-    equityList.append(equity('Pixar', 550, 7, 1, 'PIX1991'))
+    global equityList, conn
+    if len(equityList) > 0:
+        return
+    else:
+        equityList.append(equity('Apple', 700, 5, 1, 'APPLE1984'))
+        equityList.append(equity('Microsoft', 500, 4, 1, 'MIC1990'))
+        equityList.append(equity('IBM', 350, 5, 0, 'IBM1950'))
+        equityList.append(equity('Xerox', 200, 3, 0, 'XER1960'))
+        equityList.append(equity('Pixar', 550, 7, 1, 'PIX1991'))
+        print('Created wquity list')
 
 
 def CreateEquityTable():
@@ -104,3 +108,5 @@ def GetRandomPrice(find):
             return resultPrice
 
 CreateEquityList()
+if __name__ == '__main__':
+    print('main SG')

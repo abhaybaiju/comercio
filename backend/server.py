@@ -1,9 +1,27 @@
+from threading import Thread
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os
+import sqlite3
 
-app = Flask(__name__)
+from backend.matcher import Match
+conn = sqlite3.connect('omsdb.db')
+
+def do_something():
+    print('MyFlaskApp is starting up!')
+
+
+class MyFlaskApp(Flask):
+    def run(self, host=None, port=None, debug=None, load_dotenv=True, **options):
+        if not self.debug or os.getenv('WERKZEUG_RUN_MAIN') == 'true':
+          with self.app_context():
+            t = Thread(target=Match, args=('helloooooo', )).start()
+        super(MyFlaskApp, self).run(host=host, port=port, debug=debug, load_dotenv=load_dotenv, **options)
+
+
+app = MyFlaskApp(__name__)
+app.run()
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'mrig.sqlite')
 db = SQLAlchemy(app)
@@ -133,9 +151,9 @@ def add_order():
 # endpoint to show all orders
 @app.route("/orders", methods=["GET"])
 def get_orders():
-    all_orders = Order.query.all()
-    result = Orders_Schema.dump(all_orders)
-    return jsonify(result)
+    # all_orders = Order.query.all()
+    # result = Orders_Schema.dump(all_orders)
+    return jsonify('result')
 
 
 # endpoint to add a new Rejected Order
