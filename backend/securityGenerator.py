@@ -2,7 +2,7 @@ import math
 import random
 from backend.orderDB import conn
 equityNames = list(('Apple', 'Microsoft', 'IBM', 'Xerox', 'Pixar'))
-
+equityList = list()
 
 # the equities class
 class equity:
@@ -35,22 +35,29 @@ class equity:
 equityCursor = conn.cursor()
 
 # creating the list of the equity objects
-equityList = list()
-equityList.append(equity('Apple', 700, 5, 1, 'APPLE1984'))
-equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('APPLE1984', 'Apple', 'Stock', 700))
-conn.commit()
-equityList.append(equity('Microsoft', 500, 4, 1, 'MIC1990'))
-equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('MIC1990', 'Microsoft', 'Stock', 500))
-conn.commit()
-equityList.append(equity('IBM', 350, 5, 0, 'IBM1950'))
-equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('IBM1950', 'IBM', 'Stock', 350))
-conn.commit()
-equityList.append(equity('Xerox', 200, 3, 0, 'XER1960'))
-equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('XER1960', 'Xerox', 'Stock', 200))
-conn.commit()
-equityList.append(equity('Pixar', 550, 7, 1, 'PIX1991'))
-equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('PIX1991', 'Pixar', 'Stock', 550))
-conn.commit()
+def CreateEquityList():
+    global conn, equityList
+    equityList.append(equity('Apple', 700, 5, 1, 'APPLE1984'))
+    equityList.append(equity('Microsoft', 500, 4, 1, 'MIC1990'))
+    equityList.append(equity('IBM', 350, 5, 0, 'IBM1950'))
+    equityList.append(equity('Xerox', 200, 3, 0, 'XER1960'))
+    equityList.append(equity('Pixar', 550, 7, 1, 'PIX1991'))
+
+
+def CreateEquityTable():
+    global conn
+    equityCursor = conn.cursor()
+    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('APPLE1984', 'Apple', 'Stock', 700))
+    conn.commit()
+    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('MIC1990', 'Microsoft', 'Stock', 500))
+    conn.commit()
+    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('IBM1950', 'IBM', 'Stock', 350))
+    conn.commit()
+    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('XER1960', 'Xerox', 'Stock', 200))
+    conn.commit()
+    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('PIX1991', 'Pixar', 'Stock', 550))
+    conn.commit()
+
 
 # function to retrieve the attributes of a particular equity
 def GetEquityAttributes(find):
@@ -73,13 +80,19 @@ def UpdateBatchSize(find):
 
 # function to update equity price when trade occurs
 def UpdateEquityPrice(find, newPrice):
+    global equityList, conn
     for i in equityList:
         if i.name == find:
             i.UpdatePrice(newPrice)
+            upCursor = conn.cursor()
+            upCursor.execute('''UPDATE Securities_Index set ltprice = ? where name = ?;''', (newPrice, find))
+            print('executed')
+            conn.commit()
             break
 
 
 def GetRandomPrice(find):
+    global equityList
     for i in equityList:
         if i.name == find:
             minLimit = 0.9 * i.price
@@ -89,3 +102,5 @@ def GetRandomPrice(find):
             resultPrice = (random.randint(m, n) * 0.05)
             resultPrice = float("{:.2f}".format(resultPrice))
             return resultPrice
+
+CreateEquityList()
