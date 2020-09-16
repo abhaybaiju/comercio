@@ -3,10 +3,19 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os
-import sqlite3
-
+import mysql.connector
 from backend.matcher import Match
-conn = sqlite3.connect('omsdb.db')
+import time
+
+conn = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  password="1234",
+  database="oms"
+)
+
+ol = list()
+
 
 def do_something():
     print('MyFlaskApp is starting up!')
@@ -14,9 +23,16 @@ def do_something():
 
 class MyFlaskApp(Flask):
     def run(self, host=None, port=None, debug=None, load_dotenv=True, **options):
+        global ol
+        print('send')
         if not self.debug or os.getenv('WERKZEUG_RUN_MAIN') == 'true':
           with self.app_context():
-            t = Thread(target=Match, args=('Server', )).start()
+            t = Thread(target=Match).start()
+            time.sleep(3)
+            print('above for loop')
+            for x in ol:
+                print(x)
+        print('help')
         super(MyFlaskApp, self).run(host=host, port=port, debug=debug, load_dotenv=load_dotenv, **options)
 
 
@@ -150,9 +166,19 @@ def add_order():
 # endpoint to show all orders
 @app.route("/orders", methods=["GET"])
 def get_orders():
-    # all_orders = Order.query.all()
-    # result = Orders_Schema.dump(all_orders)
-    return jsonify('result')
+    # c = conn.cursor()
+    # rows = c.fetchall()
+    # # all_orders = Order.query.all()
+    # # result = Orders_Schema.dump(all_orders)
+    # return jsonify(rows)
+    global conn
+    cur = conn.cursor()
+    cur.execute("select * from Securities_Index;")
+    conn.commit()
+    temp = cur.fetchall()
+    print('printing temp[p')
+    print(temp)
+    return jsonify(temp)
 
 
 # endpoint to add a new Rejected Order

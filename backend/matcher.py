@@ -1,17 +1,25 @@
 from operator import itemgetter
-
 from backend.randomOrderGenerator import RandomGenerator
-
+import mysql.connector
 ordersList = RandomGenerator(100)
 doneOrders = []
 
-def Match(msg):
-    global ordersList, doneOrders
+conn = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  password="1234",
+  database="oms"
+)
+
+def Match():
+    global ordersList, doneOrders, conn
+    # cur = conn.cursor(prepared=True)
+    # cur.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('ffff', 'gpog', 'Stock', 666))
+    # conn.commit()
     iC = 0
-    # doneOrders = []
+    doneOrders = []
     index = -1
     last = -1
-    print('Called from ' + str(msg))
     while True:
         index += 1
         i = ordersList[index]
@@ -19,23 +27,23 @@ def Match(msg):
             # s l
             if i[4] == 's' and i[5] == 'l':
                 for j in ordersList:
-                    if j[4] == 'b' and ordersList[ReturnJC(j[0])][8] == 0 and j[5] == 'l':
+                    if j[4] == 'b' and ordersList[ReturnJC(j[0], ordersList)][8] == 0 and j[5] == 'l':
                         if j[6] >= i[6] and i[1] == j[1]:
                             if i[2] == j[2]:
                                 ordersList[iC][8] += 1
-                                jC = ReturnJC(j[0])
+                                jC = ReturnJC(j[0], ordersList)
                                 ordersList[jC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                                 doneOrders.append(['***'])
                                 print('i = j')
                             elif i[2] > j[2]:
-                                jC = ReturnJC(j[0])
+                                jC = ReturnJC(j[0], ordersList)
                                 ordersList[jC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                                 ordersList[iC][2] = (int(i[2]) - int(j[2]))
                                 print('j > i')
                             elif i[2] < j[2]:
-                                jC = ReturnJC(j[0])
+                                jC = ReturnJC(j[0], ordersList)
                                 ordersList[iC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                                 ordersList[jC][2] = (int(j[2]) - int(i[2]))
@@ -45,23 +53,23 @@ def Match(msg):
             elif i[4] == 'b' and i[5] == 'l':
                 tempQ = i[2]
                 for j in ordersList:
-                    if j[4] == 's' and ordersList[ReturnJC(j[0])][8] == 0 and j[5] == 'l':
+                    if j[4] == 's' and ordersList[ReturnJC(j[0], ordersList)][8] == 0 and j[5] == 'l':
                         if j[6] <= i[6] and i[1] == j[1]:
                             if i[2] == j[2]:
                                 ordersList[iC][8] += 1
-                                jC = ReturnJC(j[0])
+                                jC = ReturnJC(j[0], ordersList)
                                 ordersList[jC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                                 doneOrders.append(['***'])
                                 print('i = j')
                             elif i[2] > j[2]:
-                                jC = ReturnJC(j[0])
+                                jC = ReturnJC(j[0], ordersList)
                                 ordersList[jC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                                 ordersList[iC][2] = (int(i[2]) - int(j[2]))
                                 print('j > i')
                             elif i[2] < j[2]:
-                                jC = ReturnJC(j[0])
+                                jC = ReturnJC(j[0], ordersList)
                                 ordersList[iC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                                 ordersList[jC][2] = (int(j[2]) - int(i[2]))
@@ -73,25 +81,25 @@ def Match(msg):
                 tempQ = i[2]
                 tempList = SortList(filter(lambda x: x[4] == 's' and x[1] == i[1], ordersList), 6, False)
                 for j in tempList:
-                    jC = ReturnJC(j[0])
+                    jC = ReturnJC(j[0], ordersList)
                     if ordersList[jC][8] == 0 and j[4] == 'b' and i[1] == j[1]:
                         if tempQ == j[2]:
                             ordersList[iC][8] += 1
-                            jC = ReturnJC(j[0])
+                            jC = ReturnJC(j[0], ordersList)
                             ordersList[jC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                             doneOrders.append(['***'])
                             print('i = j')
                             tempQ = 0
                         elif tempQ < j[2]:
-                            jC = ReturnJC(j[0])
+                            jC = ReturnJC(j[0], ordersList)
                             ordersList[iC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                             ordersList[jC][2] = (int(j[2]) - int(i[2]))
                             print('i < j')
                             tempQ = 0
                         elif tempQ > j[2]:
-                            jC = ReturnJC(j[0])
+                            jC = ReturnJC(j[0], ordersList)
                             ordersList[jC][8] += 1
                             ordersList[iC][2] = (int(i[2]) - int(j[2]))
                             print('j > i')
@@ -104,25 +112,25 @@ def Match(msg):
                 tempQ = i[2]
                 tempList = SortList(filter(lambda x: x[4] == 's' and x[1] == i[1], ordersList), 6, False)
                 for j in tempList:
-                    jC = ReturnJC(j[0])
+                    jC = ReturnJC(j[0], ordersList)
                     if ordersList[jC][8] == 0 and j[4] == 's' and i[1] == j[1]:
                         if tempQ == j[2]:
                             ordersList[iC][8] += 1
-                            jC = ReturnJC(j[0])
+                            jC = ReturnJC(j[0], ordersList)
                             ordersList[jC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                             doneOrders.append(['***'])
                             print('i = j')
                             tempQ = 0
                         elif tempQ < j[2]:
-                            jC = ReturnJC(j[0])
+                            jC = ReturnJC(j[0], ordersList)
                             ordersList[iC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                             ordersList[jC][2] = (int(j[2]) - int(i[2]))
                             print('i < j')
                             tempQ = 0
                         elif tempQ > j[2]:
-                            jC = ReturnJC(j[0])
+                            jC = ReturnJC(j[0], ordersList)
                             ordersList[jC][8] += 1
                             ordersList[iC][2] = (int(i[2]) - int(j[2]))
                             print('j > i')
@@ -148,7 +156,7 @@ def Match(msg):
             newRows = RandomGenerator(10)
             ordersList.extend(newRows)
             if last != -1:
-                index = ReturnJC(last) - 1
+                index = ReturnJC(last, ordersList) - 1
             else:
                 index = -1
 
@@ -158,8 +166,7 @@ def SortList(ordersL, indexOfList, reverseOrNot):
     return res
 
 
-def ReturnJC(jID):
-    global ordersList
+def ReturnJC(jID, ordersList):
     counter = 0
     for x in ordersList:
         if x[0] == jID:
@@ -168,4 +175,4 @@ def ReturnJC(jID):
             counter = counter + 1
 
 
-# Match('fo')
+# Match()

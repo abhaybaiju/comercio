@@ -1,8 +1,15 @@
 import math
 import random
-from backend.orderDB import conn
+import mysql.connector
+
 equityNames = list(('Apple', 'Microsoft', 'IBM', 'Xerox', 'Pixar'))
 equityList = list()
+conn = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  password="1234",
+  database="oms"
+)
 
 # the equities class
 class equity:
@@ -32,11 +39,9 @@ class equity:
             self.trend = random.getrandbits(1)
 
 
-equityCursor = conn.cursor()
-
 # creating the list of the equity objects
 def CreateEquityList():
-    global equityList, conn
+    global equityList
     if len(equityList) > 0:
         return
     else:
@@ -50,17 +55,17 @@ def CreateEquityList():
 
 def CreateEquityTable():
     global conn
-    equityCursor = conn.cursor()
-    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('APPLE1984', 'Apple', 'Stock', 700))
+    equityCursor = conn.cursor(prepared=True)
+    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('eee', 'eerrrr', 'Stock', 700))
     conn.commit()
-    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('MIC1990', 'Microsoft', 'Stock', 500))
-    conn.commit()
-    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('IBM1950', 'IBM', 'Stock', 350))
-    conn.commit()
-    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('XER1960', 'Xerox', 'Stock', 200))
-    conn.commit()
-    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('PIX1991', 'Pixar', 'Stock', 550))
-    conn.commit()
+    # equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('MIC1990', 'Microsoft', 'Stock', 500))
+    # conn.commit()
+    # equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('IBM1950', 'IBM', 'Stock', 350))
+    # conn.commit()
+    # equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('XER1960', 'Xerox', 'Stock', 200))
+    # conn.commit()
+    # equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('PIX1991', 'Pixar', 'Stock', 550))
+    # conn.commit()
 
 
 # function to retrieve the attributes of a particular equity

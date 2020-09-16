@@ -7,7 +7,6 @@ index = 0
 # variable that locks off any changes to the index during random order generation
 indexLocked = bool(0)
 
-ordersList = list()
 CreateEquityList()
 
 def RandomGenerator(num):
