@@ -3,16 +3,15 @@ from operator import itemgetter
 from backend.randomOrderGenerator import RandomGenerator
 
 ordersList = RandomGenerator(100)
+doneOrders = []
 
-
-def Match(sup):
-    global ordersList
+def Match(msg):
+    global ordersList, doneOrders
     iC = 0
-    doneOrders = []
+    # doneOrders = []
     index = -1
     last = -1
-    print(str(sup))
-    return
+    print('Called from ' + str(msg))
     while True:
         index += 1
         i = ordersList[index]
@@ -169,4 +168,4 @@ def ReturnJC(jID):
             counter = counter + 1
 
 
-Match('fo')
+# Match('fo')

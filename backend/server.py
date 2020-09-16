@@ -16,12 +16,11 @@ class MyFlaskApp(Flask):
     def run(self, host=None, port=None, debug=None, load_dotenv=True, **options):
         if not self.debug or os.getenv('WERKZEUG_RUN_MAIN') == 'true':
           with self.app_context():
-            t = Thread(target=Match, args=('helloooooo', )).start()
+            t = Thread(target=Match, args=('Server', )).start()
         super(MyFlaskApp, self).run(host=host, port=port, debug=debug, load_dotenv=load_dotenv, **options)
 
 
 app = MyFlaskApp(__name__)
-app.run()
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'mrig.sqlite')
 db = SQLAlchemy(app)
@@ -181,4 +180,4 @@ def get_Rejected_orders():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
