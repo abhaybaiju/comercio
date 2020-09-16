@@ -37,7 +37,6 @@ def Match():
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                                 DeleteOrder(ordersList[iC][0])
                                 DeleteOrder(ordersList[jC][0])
-                                print('i = j')
                                 tempQ = 0
                             elif tempQ > j[2]:
                                 jC = ReturnJC(j[0])
@@ -47,7 +46,6 @@ def Match():
                                 UpdateQuantity(ordersList[iC][0], j[2])
                                 DeleteOrder(ordersList[jC][0])
                                 tempQ = tempQ - j[2]
-                                print('j > i')
                             elif tempQ < j[2]:
                                 jC = ReturnJC(j[0])
                                 ordersList[iC][8] += 1
@@ -56,7 +54,6 @@ def Match():
                                 UpdateQuantity(ordersList[jC][0], i[2])
                                 DeleteOrder(ordersList[iC][0])
                                 tempQ = 0
-                                print('i < j')
                             if tempQ == 0:
                                 break
             # b l
@@ -72,7 +69,6 @@ def Match():
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                                 DeleteOrder(ordersList[iC][0])
                                 DeleteOrder(ordersList[jC][0])
-                                print('i = j')
                                 tempQ = 0
                             elif tempQ > j[2]:
                                 jC = ReturnJC(j[0])
@@ -82,7 +78,6 @@ def Match():
                                 UpdateQuantity(ordersList[iC][0], j[2])
                                 DeleteOrder(ordersList[jC][0])
                                 tempQ = tempQ - j[2]
-                                print('j > i')
                             elif tempQ < j[2]:
                                 jC = ReturnJC(j[0])
                                 ordersList[iC][8] += 1
@@ -91,7 +86,6 @@ def Match():
                                 UpdateQuantity(ordersList[jC][0], i[2])
                                 DeleteOrder(ordersList[iC][0])
                                 tempQ = 0
-                                print('i < j')
                             if tempQ == 0:
                                 break
             # s m
@@ -108,7 +102,6 @@ def Match():
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                             DeleteOrder(ordersList[iC][0])
                             DeleteOrder(ordersList[jC][0])
-                            print('i = j')
                             tempQ = 0
                         elif tempQ < j[2]:
                             jC = ReturnJC(j[0])
@@ -117,7 +110,6 @@ def Match():
                             ordersList[jC][2] = (int(j[2]) - int(i[2]))
                             UpdateQuantity(ordersList[jC][0], tempQ)
                             DeleteOrder(ordersList[iC][0])
-                            print('i < j')
                             tempQ = 0
                         elif tempQ > j[2]:
                             jC = ReturnJC(j[0])
@@ -127,7 +119,6 @@ def Match():
                             tempQ = tempQ - j[2]
                             UpdateQuantity(ordersList[iC][0], j[2])
                             DeleteOrder(ordersList[jC][0])
-                            print('j > i')
                         if tempQ == 0:
                             break
             # b m
@@ -144,7 +135,6 @@ def Match():
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                             DeleteOrder(ordersList[iC][0])
                             DeleteOrder(ordersList[jC][0])
-                            print('i = j')
                             tempQ = 0
                         elif tempQ < j[2]:
                             jC = ReturnJC(j[0])
@@ -153,7 +143,6 @@ def Match():
                             ordersList[jC][2] = (int(j[2]) - int(i[2]))
                             UpdateQuantity(ordersList[jC][0], tempQ)
                             DeleteOrder(ordersList[iC][0])
-                            print('i < j')
                             tempQ = 0
                         elif tempQ > j[2]:
                             jC = ReturnJC(j[0])
@@ -163,7 +152,6 @@ def Match():
                             tempQ = tempQ - j[2]
                             UpdateQuantity(ordersList[iC][0], j[2])
                             DeleteOrder(ordersList[jC][0])
-                            print('j > i')
                         if tempQ == 0:
                             break
         iC = iC + 1

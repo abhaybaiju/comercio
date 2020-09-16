@@ -16,6 +16,7 @@ CREATE TABLE Order_Index (
 	identifier	INT NOT NULL DEFAULT 0,
 	BOS	varchar(30) NOT NULL DEFAULT 'b',
 	LOM	varchar(30),
+	name varchar(30),
 	PRIMARY KEY(id )
 );
 

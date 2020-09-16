@@ -51,13 +51,16 @@ def RandomGenerator(num):
         if orderBOS == 0:
             ordersList.append(
                 [orderID, orderName, orderQuantity, orderAON, 'b', orderLOM, orderPrice, datetime.now(), int(0), orderISIN])
-
+            cur.execute('''INSERT INTO Order_Index values(?, ?, ?, ?, ?, ?, ?, ?, ?);''',
+                        (orderID, orderISIN, orderPrice, orderQuantity, orderAON, 0, 'b', orderLOM, orderName))
+            conn.commit()
         else:
             ordersList.append(
                 [orderID, orderName, orderQuantity, orderAON, 's', orderLOM, orderPrice, datetime.now(), int(0), orderISIN])
-        cur.execute('''INSERT INTO Order_Index values(?, ?, ?, ?, ?, ?, ?, ?);''',
-                    (orderID, orderISIN, orderPrice, orderQuantity, orderAON, 0, orderBOS, orderLOM))
-        if orderBOS == 'b':
+            cur.execute('''INSERT INTO Order_Index values(?, ?, ?, ?, ?, ?, ?, ?, ?);''',
+                        (orderID, orderISIN, orderPrice, orderQuantity, orderAON, 0, 's', orderLOM, orderName))
+            conn.commit()
+        if orderBOS == '0':
             q.b+=orderQuantity
         else:
             q.s+=orderQuantity
