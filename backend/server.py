@@ -5,7 +5,7 @@ from flask_marshmallow import Marshmallow
 import os
 import mysql.connector
 from backend.matcher import Match
-import time
+
 
 conn = mysql.connector.connect(
   host="localhost",
@@ -14,25 +14,12 @@ conn = mysql.connector.connect(
   database="oms"
 )
 
-ol = list()
-
-
-def do_something():
-    print('MyFlaskApp is starting up!')
-
 
 class MyFlaskApp(Flask):
     def run(self, host=None, port=None, debug=None, load_dotenv=True, **options):
-        global ol
-        print('send')
         if not self.debug or os.getenv('WERKZEUG_RUN_MAIN') == 'true':
           with self.app_context():
-            t = Thread(target=Match).start()
-            time.sleep(3)
-            print('above for loop')
-            for x in ol:
-                print(x)
-        print('help')
+            Thread(target=Match).start()
         super(MyFlaskApp, self).run(host=host, port=port, debug=debug, load_dotenv=load_dotenv, **options)
 
 
@@ -141,9 +128,11 @@ def add_security():
 # endpoint to show all securities
 @app.route("/securities", methods=["GET"])
 def get_securities():
-    all_securities = Securities.query.all()
-    result = Securities_Schema.dump(all_securities)
-    return jsonify(result)
+    global conn
+    cur = conn.cursor()
+    cur.execute("select * from Securities_Index;")
+    temp = cur.fetchall()
+    return jsonify(temp)
 
 
 # endpoint to add a new Order
@@ -166,18 +155,10 @@ def add_order():
 # endpoint to show all orders
 @app.route("/orders", methods=["GET"])
 def get_orders():
-    # c = conn.cursor()
-    # rows = c.fetchall()
-    # # all_orders = Order.query.all()
-    # # result = Orders_Schema.dump(all_orders)
-    # return jsonify(rows)
     global conn
     cur = conn.cursor()
-    cur.execute("select * from Securities_Index;")
-    conn.commit()
+    cur.execute("select * from Order_Index;")
     temp = cur.fetchall()
-    print('printing temp[p')
-    print(temp)
     return jsonify(temp)
 
 

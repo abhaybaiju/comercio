@@ -11,6 +11,7 @@ conn = mysql.connector.connect(
   database="oms"
 )
 
+
 # the equities class
 class equity:
     # constructor for the equity objects
@@ -50,22 +51,21 @@ def CreateEquityList():
         equityList.append(equity('IBM', 350, 5, 0, 'IBM1950'))
         equityList.append(equity('Xerox', 200, 3, 0, 'XER1960'))
         equityList.append(equity('Pixar', 550, 7, 1, 'PIX1991'))
-        print('Created wquity list')
 
 
 def CreateEquityTable():
     global conn
     equityCursor = conn.cursor(prepared=True)
-    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('eee', 'eerrrr', 'Stock', 700))
+    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('APP1984', 'Apple', 'Stock', 700))
     conn.commit()
-    # equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('MIC1990', 'Microsoft', 'Stock', 500))
-    # conn.commit()
-    # equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('IBM1950', 'IBM', 'Stock', 350))
-    # conn.commit()
-    # equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('XER1960', 'Xerox', 'Stock', 200))
-    # conn.commit()
-    # equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('PIX1991', 'Pixar', 'Stock', 550))
-    # conn.commit()
+    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('MIC1990', 'Microsoft', 'Stock', 500))
+    conn.commit()
+    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('IBM1950', 'IBM', 'Stock', 350))
+    conn.commit()
+    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('XER1960', 'Xerox', 'Stock', 200))
+    conn.commit()
+    equityCursor.execute('''INSERT INTO Securities_Index values(?, ?, ?, ?);''', ('PIX1991', 'Pixar', 'Stock', 550))
+    conn.commit()
 
 
 # function to retrieve the attributes of a particular equity
@@ -78,6 +78,11 @@ def GetEquityAttributes(find):
             resultList.append(i.trend)
             return resultList
 
+def GetISIN(find):
+    global equityList
+    for i in equityList:
+        if i.name == find:
+            return i.isin
 
 # function to decrement the batch size of the equity when a new order is generated
 def UpdateBatchSize(find):
@@ -93,9 +98,8 @@ def UpdateEquityPrice(find, newPrice):
     for i in equityList:
         if i.name == find:
             i.UpdatePrice(newPrice)
-            upCursor = conn.cursor()
+            upCursor = conn.cursor(prepared=True)
             upCursor.execute('''UPDATE Securities_Index set ltprice = ? where name = ?;''', (newPrice, find))
-            print('executed')
             conn.commit()
             break
 
@@ -114,4 +118,4 @@ def GetRandomPrice(find):
 
 CreateEquityList()
 if __name__ == '__main__':
-    print('main SG')
+    print('Main, SecurityGenerator')
