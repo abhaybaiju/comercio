@@ -3,6 +3,8 @@ import { useTheme } from '@material-ui/core/styles';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer,Tooltip} from 'recharts';
 import Title from './Title';
 import axios from 'axios';
+import Skeleton from '@material-ui/lab/Skeleton';
+
 
 
 // Generate Sales Data
@@ -10,23 +12,6 @@ import axios from 'axios';
 
 export default function Chart() {
   const theme = useTheme();
-
-  function createData(time, amount) {
-    return { time, amount };
-  }
-  
-  const data = [
-    createData('00:00', 0),
-    createData('03:00', 300),
-    createData('06:00', 600),
-    createData('09:00', 800),
-    createData('12:00', 1500),
-    createData('15:00', 2000),
-    createData('18:00', 2400),
-    createData('21:00', 2300),
-    createData('24:00', undefined),
-  ];
-
 
   const [rows,setRows] = useState([]);
 
@@ -40,7 +25,7 @@ export default function Chart() {
     resp.data.map((row)=> createData(row.BOS,row.LOM,row.Order_isin,row.aon,row.identifier,row.price,row.qty))
     console.log("Fetching chart",resp.data); 
     });}
-    , 1000);
+    , 2000);
     return () => clearInterval(id);  
   }, []);
   
@@ -52,6 +37,7 @@ export default function Chart() {
     <React.Fragment>
       <Title>Today</Title>
       <ResponsiveContainer>
+        {rows.length>0 ? (
         <LineChart
           data={rows}
           margin={{
@@ -72,7 +58,7 @@ export default function Chart() {
           </YAxis>
           <Line type="monotone" dataKey="amount" stroke={theme.palette.primary.main} dot={true} />
           <Tooltip/>
-        </LineChart>
+        </LineChart>) : (<Skeleton variant="rect" animation="wave"/>)}
       </ResponsiveContainer>
     </React.Fragment>
   );

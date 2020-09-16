@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
 import axios from 'axios';
 import Skeleton from '@material-ui/lab/Skeleton';
+import { Button } from '@material-ui/core';
 
 // Generate Order Data
 
@@ -31,16 +32,16 @@ export default function Orders() {
   const [rows,setRows] = useState([]);
 
   useEffect(() => {
-    function createData(BOS, LOM, Order_isin, aon, identifier, price, qty) {
-      setRows(rows => [{ "BOS":BOS, "LOM":LOM, "Order_isin":Order_isin, "aon":aon, "identifier":identifier, "price":price, "qty":qty}, ...rows,])
+    function createData(id, BOS, LOM, Order_isin, aon, identifier, price, qty) {
+      setRows(rows => [{ "id":id,"BOS":BOS, "LOM":LOM, "Order_isin":Order_isin, "aon":aon, "identifier":identifier, "price":price, "qty":qty}, ...rows,])
     }
     const id = setInterval(() => {
     axios.get('/orders').then(resp => {
     setRows([]);
-    resp.data.map((row)=> createData(row.BOS,row.LOM,row.Order_isin,row.aon,row.identifier,row.price,row.qty))
+    resp.data.map((row)=> createData(row.id,row.BOS,row.LOM,row.Order_isin,row.aon,row.identifier,row.price,row.qty))
     console.log("Fetching",resp.data); 
     });}
-    , 1000);
+    , 2000);
     return () => clearInterval(id);  
   }, []);
   
@@ -51,33 +52,35 @@ export default function Orders() {
     
     <React.Fragment>
       <Title>Recent Trades</Title>
-      {rows!== [] ? (
+      {rows.length>0 ? (
       <Table size="medium">
         <TableHead>
           <TableRow>
+            <TableCell>ID</TableCell>
             <TableCell>ISIN</TableCell>
-            <TableCell>Identifier</TableCell>
             <TableCell>Type</TableCell>
+            <TableCell>Type(LOM)</TableCell>
             <TableCell>Quantity</TableCell>
-            <TableCell align="right">Sale Price</TableCell>
+            <TableCell align="right">Price</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.slice(0,5).map((row) => (
-            <TableRow key={row.identifier}>
+            <TableRow key={row.id}>
+              <TableCell>{row.id}</TableCell>
               <TableCell>{row.Order_isin}</TableCell>
-              <TableCell>{row.identifier}</TableCell>
-              <TableCell>{row.BOS}</TableCell>
+              <TableCell>{row.BOS==='b'?"Buy":"Sell"}</TableCell>
+              <TableCell>{row.LOM==='l'?"Limit":"Market"}</TableCell>
               <TableCell>{row.qty}</TableCell>
               <TableCell align="right">{row.price}</TableCell>
             </TableRow>
           ))}
         </TableBody>
-      </Table>) : (<Skeleton variant="rect" />)}
+      </Table>) : (<Skeleton animation="wave" variant="rect" height={300}/>)}
       <div className={classes.seeMore}>
-        <Link color="primary" href="#" onClick={preventDefault}>
+        <Button variant="outlined" color="primary" href="/admin" >
           See more orders
-        </Link>
+        </Button>
       </div>
     </React.Fragment>
   );

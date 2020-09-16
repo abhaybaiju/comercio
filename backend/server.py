@@ -57,7 +57,7 @@ class Order(db.Model):
 
 class OrderSchema(ma.Schema):
     class Meta:
-        fields = ('Order_isin', 'price', 'qty', 'aon', 'identifier', 'BOS', 'LOM')
+        fields = ('id','Order_isin', 'price', 'qty', 'aon', 'identifier', 'BOS', 'LOM')
 
 
 Order_Schema = OrderSchema()
@@ -84,7 +84,7 @@ class Rejected_Order(db.Model):
     
 class RejectedOrderSchema(ma.Schema):
     class Meta:
-        fields = ('Order_isin', 'price', 'qty', 'aon', 'BOS', 'LOM')
+        fields = ('sr_no','Order_isin', 'price', 'qty', 'aon', 'BOS', 'LOM')
 
 
 RejectedOrder_Schema = RejectedOrderSchema()
