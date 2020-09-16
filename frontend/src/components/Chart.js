@@ -17,11 +17,11 @@ export default function Chart() {
 
   useEffect(() => {
     function createData(BOS, LOM, Order_isin, aon, identifier, price, qty) {
-      setRows(rows => [{ "time":'03:00', "amount":price}, ...rows,])
+      setRows(rows => [...rows,{ "time":'03:00', "amount":price},])
     }
     const id = setInterval(() => {
     axios.get('/orders').then(resp => {
-      
+      setRows([]);
     resp.data.map((row)=> createData(row.BOS,row.LOM,row.Order_isin,row.aon,row.identifier,row.price,row.qty))
     console.log("Fetching chart",resp.data); 
     });}
@@ -56,8 +56,7 @@ export default function Chart() {
               Price ($)
             </Label>
           </YAxis>
-          <Line type="monotone" dataKey="amount" stroke={theme.palette.primary.main} dot={true} />
-          <Tooltip/>
+          <Line isAnimationActive={false} type="monotone" dataKey="amount" stroke={theme.palette.primary.main} />
         </LineChart>) : (<Skeleton variant="rect" animation="wave"/>)}
       </ResponsiveContainer>
     </React.Fragment>
