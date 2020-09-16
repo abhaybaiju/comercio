@@ -181,8 +181,12 @@ def add_Rejected_order():
 # endpoint to show all Rejected Orders
 @app.route("/Rejectedorders", methods=["GET"])
 def get_Rejected_orders():
-    all_Rejected_orders = Order.query.all()
-    result = Orders_Schema.dump(all_Rejected_orders)
+    global conn
+    # all_Rejected_orders = Order.query.all()
+    # result = Orders_Schema.dump(all_Rejected_orders)
+    cur = conn.cursor()
+    cur.execute('''select * from Rejected_Order;''')
+    result = cur.fetchall()
     return jsonify(result)
 
 

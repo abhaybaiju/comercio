@@ -18,13 +18,11 @@ def Match():
     global ordersList, doneOrders, conn
     iC = 0
     doneOrders = []
-    index = -1
     last = -1
     cur = conn.cursor(prepared=True)
 
     while True:
-        index += 1
-        i = ordersList[index]
+        i = ordersList[iC]
         if ordersList[iC][8] == 0:
             # s l
             if i[4] == 's' and i[5] == 'l':
@@ -181,14 +179,14 @@ def Match():
         if flag == 0:
             last = i[0]
 
-        if (index + 1) % 50 == 0:
+        if (iC + 1) % 50 == 0:
             ordersList = list(filter(lambda x: x[8] != 1, ordersList))
             newRows = RandomGenerator(10)
             ordersList.extend(newRows)
             if last != -1:
-                index = ReturnJC(last) - 1
+                iC = ReturnJC(last) - 1
             else:
-                index = -1
+                iC = -1
             ManualOrders(ordersList)
 
 
