@@ -31,8 +31,8 @@ export default function Orderform() {
   const classes = useStyles();
 
   const [value, setValue] = useState(0);
-  const [qty, setQty] = useState(0);
-  const [price, setPrice] = useState(0);
+  const [qty, setQty] = useState();
+  const [price, setPrice] = useState();
   const [radio, setRadio] = useState('m');
   const [security, setSecurity] = React.useState('');
 
@@ -53,14 +53,15 @@ export default function Orderform() {
   };
 
   const handleSubmit = () => {
+    const securities = ['AAPL','FB','GOOGL','MSFT'];
     const postObject = {
-      'Order_isin' : 'test',
+      'Order_isin' : securities[security],
       'price': price,
       'qty': qty,
       'aon': 'n',
       'identifier': 0,
       'BOS': value?'s':'b',
-      'LOM': 'm'
+      'LOM': radio
     }
     axios.post('/order', postObject).then(response=>{ console.log(response)});
   }

@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
@@ -14,31 +13,14 @@ import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import Zoom from '@material-ui/core/Zoom';
-import { mainListItems, secondaryListItems } from './listItems';
-import Chart from './Chart';
-import Deposits from './Deposits';
-import Orders from './Orders';
-import Orderform from './Orderform';
+import Slide from '@material-ui/core/Slide';
 
-function Copyright() {
-    const [currentTime, setCurrentTime] = useState("");
-    /*useEffect(() => {
-        fetch('/time').then(res => res.json()).then(data => {
-          setCurrentTime(data.time);
-        });
-      }, [currentTime]);
-      var d = new Date(0);
-  d.setUTCSeconds(currentTime);*/
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {/*d.toLocaleTimeString()*/}
-    </Typography>
-  );
-}
+import { mainListItems, secondaryListItems } from './listItems';
+import EnhancedTable from '../components/EnhancedTable';
 
 const drawerWidth = 240;
 
@@ -121,7 +103,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+export default function Admin() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
@@ -176,39 +158,28 @@ export default function Dashboard() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container justify="space-evenly" spacing={2} style={{maxHeight: 650}}>
-            {/*Left Grid*/}
-          <Grid container item spacing={3} justify="space-around" lg={8} >
-            {/* Chart */}
-            <Grid item xs={12} md={8} lg={12} >
-              <Paper style={{backgroundColor:"#303D88", height:350}} className={fixedHeightPaper}>
-                <Chart />
-              </Paper>
-            </Grid>
-            {/* Recent Orders */}
+          <Slide direction="up" in={true} mountOnEnter unmountOnExit>
+          <Grid container justify="space-evenly" spacing={1}>
+          <Grid container item spacing={3} justify="space-around" lg={12} >
+            {/* Total Orders */}
             <Grid item xs={12} >
               <Paper className={classes.paper} >
-                <Orders />
+                <EnhancedTable/>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} >
+              <Paper className={classes.paper} >
+                <EnhancedTable/>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} >
+              <Paper className={classes.paper} >
+                <EnhancedTable/>
               </Paper>
             </Grid>
           </Grid>
-          {/*Right Grid*/}
-            <Grid item container spacing={0} justify="space-evenly" lg={4}>
-              <Grid item lg={12}><Paper className={classes.paper} style={{height : 500}}>
-                    <Orderform />
-                  </Paper>
-              </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={12}>
-                  <Paper className={fixedHeightPaper}>
-                    <Deposits />
-                  </Paper>
-                </Grid>
-            </Grid>
           </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
+          </Slide>
         </Container>
       </main>
     </div>

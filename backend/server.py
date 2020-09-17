@@ -1,9 +1,28 @@
+from threading import Thread
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os
+import mysql.connector
+from backend.matcher import Match
 
-app = Flask(__name__)
+conn = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="1234",
+    database="oms"
+)
+
+
+class MyFlaskApp(Flask):
+    def run(self, host=None, port=None, debug=None, load_dotenv=True, **options):
+        if not self.debug or os.getenv('WERKZEUG_RUN_MAIN') == 'true':
+            with self.app_context():
+                Thread(target=Match).start()
+        super(MyFlaskApp, self).run(host=host, port=port, debug=debug, load_dotenv=load_dotenv, **options)
+
+
+app = MyFlaskApp(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'mrig.sqlite')
 db = SQLAlchemy(app)
@@ -45,7 +64,7 @@ class Order(db.Model):
     LOM = db.Column(db.String(80), nullable=False)
     Order_isin = db.Column(db.String(80), db.ForeignKey('securities.isin'))
 
-    def __init__(self,Order_isin, price, qty, aon, identifier, BOS, LOM):
+    def __init__(self, Order_isin, price, qty, aon, identifier, BOS, LOM):
         self.Order_isin = Order_isin
         self.price = price
         self.qty = qty
@@ -57,7 +76,7 @@ class Order(db.Model):
 
 class OrderSchema(ma.Schema):
     class Meta:
-        fields = ('Order_isin', 'price', 'qty', 'aon', 'identifier', 'BOS', 'LOM')
+        fields = ('id','Order_isin', 'price', 'qty', 'aon', 'identifier', 'BOS', 'LOM')
 
 
 Order_Schema = OrderSchema()
@@ -73,7 +92,7 @@ class Rejected_Order(db.Model):
     BOS = db.Column(db.String(80), nullable=False)
     Order_isin = db.Column(db.String(80), db.ForeignKey('securities.isin'))
 
-    def __init__(self,Order_isin, price, qty, aon, BOS, LOM):
+    def __init__(self, Order_isin, price, qty, aon, BOS, LOM):
         self.Order_isin = Order_isin
         self.price = price
         self.qty = qty
@@ -81,10 +100,10 @@ class Rejected_Order(db.Model):
         self.BOS = BOS
         self.LOM = LOM
 
-    
+
 class RejectedOrderSchema(ma.Schema):
     class Meta:
-        fields = ('Order_isin', 'price', 'qty', 'aon', 'BOS', 'LOM')
+        fields = ('sr_no','Order_isin', 'price', 'qty', 'aon', 'BOS', 'LOM')
 
 
 RejectedOrder_Schema = RejectedOrderSchema()
@@ -99,7 +118,7 @@ def add_security():
     type = request.json['type']
     ltprice = request.json['ltprice']
 
-    new_security = Securities(security_name = security_name , isin = isin , type = type , ltprice = ltprice)
+    new_security = Securities(security_name=security_name, isin=isin, type=type, ltprice=ltprice)
     db.session.add(new_security)
     db.session.commit()
     return Security_Schema.jsonify(new_security)
@@ -108,9 +127,11 @@ def add_security():
 # endpoint to show all securities
 @app.route("/securities", methods=["GET"])
 def get_securities():
-    all_securities = Securities.query.all()
-    result = Securities_Schema.dump(all_securities)
-    return jsonify(result)
+    global conn
+    cur = conn.cursor()
+    cur.execute("select * from Securities_Index;")
+    temp = cur.fetchall()
+    return jsonify(temp)
 
 
 # endpoint to add a new Order
@@ -133,9 +154,11 @@ def add_order():
 # endpoint to show all orders
 @app.route("/orders", methods=["GET"])
 def get_orders():
-    all_orders = Order.query.all()
-    result = Orders_Schema.dump(all_orders)
-    return jsonify(result)
+    global conn
+    cur = conn.cursor()
+    cur.execute("select * from Order_Index;")
+    temp = cur.fetchall()
+    return jsonify(temp)
 
 
 # endpoint to add a new Rejected Order
@@ -148,7 +171,7 @@ def add_Rejected_order():
     BOS = request.json['BOS']
     LOM = request.json['LOM']
 
-    new_Rejected_order = Rejected_Order(Order_isin,price,qty,aon,BOS,LOM)
+    new_Rejected_order = Rejected_Order(Order_isin, price, qty, aon, BOS, LOM)
     db.session.add(new_Rejected_order)
     db.session.commit()
     return Order_Schema.jsonify(new_Rejected_order)
@@ -157,10 +180,23 @@ def add_Rejected_order():
 # endpoint to show all Rejected Orders
 @app.route("/Rejectedorders", methods=["GET"])
 def get_Rejected_orders():
-    all_Rejected_orders = Order.query.all()
-    result = Orders_Schema.dump(all_Rejected_orders)
+    global conn
+    # all_Rejected_orders = Order.query.all()
+    # result = Orders_Schema.dump(all_Rejected_orders)
+    cur = conn.cursor()
+    cur.execute('''select * from Rejected_Order;''')
+    result = cur.fetchall()
+    return jsonify(result)
+
+
+@app.route("/tradeindex", methods=["GET"])
+def get_trade_index():
+    global conn
+    cur = conn.cursor()
+    cur.execute('''select * from Trade_Index;''')
+    result = cur.fetchall()
     return jsonify(result)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
