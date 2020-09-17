@@ -2,14 +2,15 @@ from operator import itemgetter
 from backend.randomOrderGenerator import RandomGenerator
 import mysql.connector
 from backend.tools import DeleteOrder, UpdateQuantity, ManualOrders, ClearOrders, InsertTrade
+
 ordersList = RandomGenerator(100)
 doneOrders = []
 
 conn = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password="1234",
-  database="oms"
+    host="localhost",
+    user="root",
+    password="1234",
+    database="oms"
 )
 
 
@@ -132,8 +133,6 @@ def Match():
                             break
             # b m
             if i[4] == 'b' and i[5] == 'm':
-                if(i[0].startswith('m')):
-                    print('manual order')
                 tempQ = i[2]
                 tempList = SortList(filter(lambda x: x[4] == 's' and x[1] == i[1], ordersList), 6, False)
                 for j in tempList:

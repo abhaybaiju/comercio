@@ -1,7 +1,6 @@
 import random
 from datetime import datetime
 import mysql.connector
-
 from backend.securityGenerator import equityNames, UpdateBatchSize, GetRandomPrice, CreateEquityList, GetISIN
 
 
@@ -75,7 +74,3 @@ def RandomGenerator(num):
 
     indexLocked = 0
     return ordersList
-
-
-if __name__ == '__main__':
-    print('main rog')

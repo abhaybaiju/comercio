@@ -6,20 +6,19 @@ import os
 import mysql.connector
 from backend.matcher import Match
 
-
 conn = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password="1234",
-  database="oms"
+    host="localhost",
+    user="root",
+    password="1234",
+    database="oms"
 )
 
 
 class MyFlaskApp(Flask):
     def run(self, host=None, port=None, debug=None, load_dotenv=True, **options):
         if not self.debug or os.getenv('WERKZEUG_RUN_MAIN') == 'true':
-          with self.app_context():
-            Thread(target=Match).start()
+            with self.app_context():
+                Thread(target=Match).start()
         super(MyFlaskApp, self).run(host=host, port=port, debug=debug, load_dotenv=load_dotenv, **options)
 
 
@@ -65,7 +64,7 @@ class Order(db.Model):
     LOM = db.Column(db.String(80), nullable=False)
     Order_isin = db.Column(db.String(80), db.ForeignKey('securities.isin'))
 
-    def __init__(self,Order_isin, price, qty, aon, identifier, BOS, LOM):
+    def __init__(self, Order_isin, price, qty, aon, identifier, BOS, LOM):
         self.Order_isin = Order_isin
         self.price = price
         self.qty = qty
@@ -93,7 +92,7 @@ class Rejected_Order(db.Model):
     BOS = db.Column(db.String(80), nullable=False)
     Order_isin = db.Column(db.String(80), db.ForeignKey('securities.isin'))
 
-    def __init__(self,Order_isin, price, qty, aon, BOS, LOM):
+    def __init__(self, Order_isin, price, qty, aon, BOS, LOM):
         self.Order_isin = Order_isin
         self.price = price
         self.qty = qty
@@ -101,7 +100,7 @@ class Rejected_Order(db.Model):
         self.BOS = BOS
         self.LOM = LOM
 
-    
+
 class RejectedOrderSchema(ma.Schema):
     class Meta:
         fields = ('Order_isin', 'price', 'qty', 'aon', 'BOS', 'LOM')
@@ -119,7 +118,7 @@ def add_security():
     type = request.json['type']
     ltprice = request.json['ltprice']
 
-    new_security = Securities(security_name = security_name , isin = isin , type = type , ltprice = ltprice)
+    new_security = Securities(security_name=security_name, isin=isin, type=type, ltprice=ltprice)
     db.session.add(new_security)
     db.session.commit()
     return Security_Schema.jsonify(new_security)
@@ -172,7 +171,7 @@ def add_Rejected_order():
     BOS = request.json['BOS']
     LOM = request.json['LOM']
 
-    new_Rejected_order = Rejected_Order(Order_isin,price,qty,aon,BOS,LOM)
+    new_Rejected_order = Rejected_Order(Order_isin, price, qty, aon, BOS, LOM)
     db.session.add(new_Rejected_order)
     db.session.commit()
     return Order_Schema.jsonify(new_Rejected_order)
@@ -189,6 +188,7 @@ def get_Rejected_orders():
     result = cur.fetchall()
     return jsonify(result)
 
+
 @app.route("/tradeindex", methods=["GET"])
 def get_trade_index():
     global conn
@@ -196,6 +196,7 @@ def get_trade_index():
     cur.execute('''select * from Trade_Index;''')
     result = cur.fetchall()
     return jsonify(result)
+
 
 if __name__ == '__main__':
     app.run(debug=False)

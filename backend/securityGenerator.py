@@ -2,13 +2,14 @@ import math
 import random
 import mysql.connector
 
+
 equityNames = list(('Apple', 'Microsoft', 'IBM', 'Xerox', 'Pixar'))
 equityList = list()
 conn = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password="1234",
-  database="oms"
+    host="localhost",
+    user="root",
+    password="1234",
+    database="oms"
 )
 
 
@@ -78,11 +79,13 @@ def GetEquityAttributes(find):
             resultList.append(i.trend)
             return resultList
 
+
 def GetISIN(find):
     global equityList
     for i in equityList:
         if i.name == find:
             return i.isin
+
 
 # function to decrement the batch size of the equity when a new order is generated
 def UpdateBatchSize(find):
@@ -115,6 +118,7 @@ def GetRandomPrice(find):
             resultPrice = (random.randint(m, n) * 0.05)
             resultPrice = float("{:.2f}".format(resultPrice))
             return resultPrice
+
 
 CreateEquityList()
 if __name__ == '__main__':
