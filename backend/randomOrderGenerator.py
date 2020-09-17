@@ -1,107 +1,76 @@
 import random
 from datetime import datetime
+import mysql.connector
+from backend.securityGenerator import equityNames, UpdateBatchSize, GetRandomPrice, CreateEquityList, GetISIN
 
-from backend.securityGenerator import equityNames, UpdateBatchSize, GetRandomPrice
 
-# default ISIN index
-# for each new day the order would be X00000000 where X is the number of the day
-index = 100000000
+class Quantity:
+    def __init__(self, x=0, y=0):
+        self.b = x
+        self.s = y
+
+
+conn = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="1234",
+    database="oms"
+)
+
+index = 0
 # variable that locks off any changes to the index during random order generation
 indexLocked = bool(0)
 
-# separate lists that contain order objects
-buyOrdersList = list()
-sellOrdersList = list()
+q = Quantity(0, 0)
+
+CreateEquityList()
 
 
-# the price doubles up as the market/limit order indicator
-# if the price is 0, the order is a market order, else it is a limit order
-# the buyOrSell variable, 0 is buy, 1 is sell
-class order:
-    def __init__(self, id, name, quantity, allOrNothing, buyOrSell, price):
-        self.id = int(id)
-        self.name = str(name)
-        self.quantity = int(quantity)
-        self.allOrNothing = bool(allOrNothing)
-        self.buyOrSell = bool(buyOrSell)
-        self.price = int(price)
-        self.stamp = str(datetime.now())
-
-    # returns the atttributes of the order as a list
-    def RetrieveOrderAttributes(self):
-        resultList = list()
-        resultList.extend(
-            [self.id, self.name, self.quantity, self.allOrNothing, self.buyOrSell, self.price, self.stamp])
-        return resultList
-
-    def PrintOrder(self):
-        result = list()
-        result.extend(
-            [self.id, self.name, self.quantity, self.allOrNothing, self.buyOrSell, self.price, self.stamp])
-        print(str(result[0]) + ' ' + str(result[1]) + ' ' + str(result[2]) + ' ' + str(result[3]) + ' ' + str(
-                result[4]) + ' ' + str(result[5]) + ' ' + str(result[6]))
-
-# the random order generator, default arguments are
-def RandomGenerator(self, minOrders=50, maxOrders=100):
-    if minOrders > maxOrders:
-        t = minOrders
-        minOrders = maxOrders
-        maxOrders = t
-    elif minOrders == maxOrders:
-        minOrders = 50
-        maxOrders = 100
-
-    numberOfOrders = random.randint(minOrders, maxOrders)
-
-    global index, indexLocked, buyOrdersList, sellOrdersList
+def RandomGenerator(num):
+    numberOfOrders = num
+    global index, indexLocked, conn, q
+    ordersList = []
 
     # locking the index
     indexLocked = 1
 
     for i in range(0, numberOfOrders):
         index += 1
-        orderID = index
+        orderID = str(index)
         orderName = equityNames[random.randint(0, (len(equityNames) - 1))]
         orderQuantity = random.randint(1, 200)
         orderAON = bool(random.getrandbits(1))
         orderBOS = bool(random.getrandbits(1))
+        orderISIN = GetISIN(orderName)
         if (random.getrandbits(1)):
             orderPrice = GetRandomPrice(orderName)
+            orderLOM = 'l'
         else:
             orderPrice = 0
+            orderLOM = 'm'
 
-        if (orderBOS == 0):
-            buyOrdersList.append(order(orderID, orderName, orderQuantity, orderAON, orderBOS, orderPrice))
+        cur = conn.cursor(prepared=True)
+        if orderBOS == 0:
+            ordersList.append(
+                [orderID, orderName, orderQuantity, orderAON, 'b', orderLOM, orderPrice, datetime.now(), int(0),
+                 orderISIN])
+            cur.execute('''INSERT INTO Order_Index values(?, ?, ?, ?, ?, ?, ?, ?, ?);''',
+                        (orderID, orderISIN, orderPrice, orderQuantity, orderAON, 0, 'b', orderLOM, orderName))
+            conn.commit()
         else:
-            sellOrdersList.append(order(orderID, orderName, orderQuantity, orderAON, orderBOS, orderPrice))
+            ordersList.append(
+                [orderID, orderName, orderQuantity, orderAON, 's', orderLOM, orderPrice, datetime.now(), int(0),
+                 orderISIN])
+            cur.execute('''INSERT INTO Order_Index values(?, ?, ?, ?, ?, ?, ?, ?, ?);''',
+                        (orderID, orderISIN, orderPrice, orderQuantity, orderAON, 0, 's', orderLOM, orderName))
+            conn.commit()
+
+        if orderBOS == '0':
+            q.b += orderQuantity
+        else:
+            q.s += orderQuantity
+
         UpdateBatchSize(orderName)
 
     indexLocked = 0
-
-
-RandomGenerator(100, 200)
-print(len(buyOrdersList))
-print(len(sellOrdersList))
-
-
-# prints the order details from the two order list
-# argument 0 is for the buy list and 1 for the sell list
-def PrintOrderDetails(x):
-    global buyOrdersList, sellOrdersList
-
-    if x == 0:
-        print('Printing the buy orders:')
-        for i in buyOrdersList:
-            result = i.RetrieveOrderAttributes()
-            print(str(result[0]) + ' ' + str(result[1]) + ' ' + str(result[2]) + ' ' + str(result[3]) + ' ' + str(
-                result[4]) + ' ' + str(result[5]) + ' ' + str(result[6]))
-    else:
-        print('Printing the sell orders:')
-        for i in sellOrdersList:
-            result = i.RetrieveOrderAttributes()
-            print(str(result[0]) + ' ' + str(result[1]) + ' ' + str(result[2]) + ' ' + str(result[3]) + ' ' + str(
-                result[4]) + ' ' + str(result[5]) + ' ' + str(result[6]))
-
-
-PrintOrderDetails(0)
-PrintOrderDetails(1)
+    return ordersList
