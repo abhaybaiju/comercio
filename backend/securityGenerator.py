@@ -47,7 +47,7 @@ def CreateEquityList():
     if len(equityList) > 0:
         return
     else:
-        equityList.append(equity('Apple', 700, 5, 1, 'APPLE1984'))
+        equityList.append(equity('Apple', 700, 5, 1, 'APP1984'))
         equityList.append(equity('Microsoft', 500, 4, 1, 'MIC1990'))
         equityList.append(equity('IBM', 350, 5, 0, 'IBM1950'))
         equityList.append(equity('Xerox', 200, 3, 0, 'XER1960'))

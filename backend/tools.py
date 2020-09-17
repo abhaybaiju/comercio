@@ -17,10 +17,13 @@ def ClearOrders():
     curr = conn.cursor()
     curr.execute('''delete from order_index;''')
     conn.commit()
+    curr.execute('''delete from trade_index;''')
+    conn.commit()
     curr.execute('''delete from Rejected_order;''')
     conn.commit()
-    curr.execute('''delete from My_Portfolio''')
-    conn.commit()
+    # TODO: set all quantities in my portfolio as 0
+    # curr.execute('''delete from My_Portfolio''')
+    # conn.commit()
 
 
 def DeleteOrder(id):
@@ -37,38 +40,35 @@ def UpdateQuantity(id, change):
     conn.commit()
 
 
-def InsertTrade(buyID, sellID, quan, price):
+def InsertTrade(buy, sell, quan, price):
     global conn
-    if buyID.startswith('m'):
-        InsertPortfolio(buyID, quan)
-    if sellID.startswith('m'):
-        InsertPortfolio(sellID, quan)
     cur = conn.cursor(prepared=True)
+    if buy[0].startswith('m'):
+        cur.execute('''update My_Portfolio set qty = qty + ? where name = ?;''', (quan, buy[1]))
+        conn.commit()
+    if sell[0].startswith('m'):
+        cur.execute('''update My_Portfolio set qty = qty - ? where name = ?;''', (quan, sell[1]))
+        conn.commit()
     cur.execute('''insert into trade_index (buyorder_id, sellorder_id, price, qty) values (?, ?, ?, ?);''',
-                (buyID, sellID, price, quan))
+                (buy[0], sell[0], price, quan))
     conn.commit()
     q.b -= quan
     q.s -= quan
 
 
-def InsertPortfolio(orderID, quan):
+def CreatePortfolio():
     global conn
-    # cur = conn.cursor(prepared=True)
-    # cur.execute('''select * from order_index where id='?';''', (str(orderID)))
-    # temp = cur.fetchall()
-    # print('printing temp')
-    # print(temp)
-    # conn.commit()
-    # neo = conn.cursor(prepared=True)
-    # neo.execute('''select * from My_Portfolio where name = ?;''', (temp[0][0]))
-    # y = cur.fetchall()
-    #
-    # if y is not None:
-    #     neo.execute('''update My_Portfolio set qty = qty + ? where name = ?;''', (quan, temp[0][0]))
-    #     conn.commit()
-    # else:
-    #     neo.execute('''insert into My_Portfolio values (?, ?, ?)''', (temp[0][1], temp[0][0], quan))
-    #     conn.commit()
+    cur = conn.cursor()
+    cur.execute('''insert into my_portfolio values('APP1984', 'Apple', 0);''')
+    conn.commit()
+    cur.execute('''insert into my_portfolio values('MIC1990', 'Microsoft', 0);''')
+    conn.commit()
+    cur.execute('''insert into my_portfolio values('IBM1950', 'IBM', 0);''')
+    conn.commit()
+    cur.execute('''insert into my_portfolio values('XER1960', 'Xerox', 0);''')
+    conn.commit()
+    cur.execute('''insert into my_portfolio values('PIX1991', 'Pixar', 0);''')
+    conn.commit()
 
 
 def ManualOrders(ol):

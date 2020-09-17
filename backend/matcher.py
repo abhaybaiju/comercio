@@ -36,7 +36,7 @@ def Match():
                                 jC = ReturnJC(j[0])
                                 ordersList[jC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
-                                InsertTrade(ordersList[jC][0], ordersList[iC][0], tempQ, j[6])
+                                InsertTrade(ordersList[jC], ordersList[iC], tempQ, j[6])
                                 DeleteOrder(ordersList[iC][0])
                                 DeleteOrder(ordersList[jC][0])
                                 tempQ = 0
@@ -44,7 +44,7 @@ def Match():
                                 jC = ReturnJC(j[0])
                                 ordersList[jC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
-                                InsertTrade(ordersList[jC][0], ordersList[iC][0], j[2], j[6])
+                                InsertTrade(ordersList[jC], ordersList[iC], j[2], j[6])
                                 ordersList[iC][2] = (int(tempQ) - int(j[2]))
                                 UpdateQuantity(ordersList[iC][0], j[2])
                                 DeleteOrder(ordersList[jC][0])
@@ -53,7 +53,7 @@ def Match():
                                 jC = ReturnJC(j[0])
                                 ordersList[iC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
-                                InsertTrade(ordersList[jC][0], ordersList[iC][0], tempQ, j[6])
+                                InsertTrade(ordersList[jC], ordersList[iC], tempQ, j[6])
                                 ordersList[jC][2] = (int(j[2]) - int(tempQ))
                                 UpdateQuantity(ordersList[jC][0], i[2])
                                 DeleteOrder(ordersList[iC][0])
@@ -71,7 +71,7 @@ def Match():
                                 jC = ReturnJC(j[0])
                                 ordersList[jC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
-                                InsertTrade(ordersList[iC][0], ordersList[jC][0], tempQ, j[6])
+                                InsertTrade(ordersList[iC], ordersList[jC], tempQ, j[6])
                                 DeleteOrder(ordersList[iC][0])
                                 DeleteOrder(ordersList[jC][0])
                                 tempQ = 0
@@ -79,7 +79,7 @@ def Match():
                                 jC = ReturnJC(j[0])
                                 ordersList[jC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
-                                InsertTrade(ordersList[iC][0], ordersList[jC][0], j[2], j[6])
+                                InsertTrade(ordersList[iC], ordersList[jC], j[2], j[6])
                                 ordersList[iC][2] = (int(tempQ) - int(j[2]))
                                 UpdateQuantity(ordersList[iC][0], j[2])
                                 DeleteOrder(ordersList[jC][0])
@@ -88,7 +88,7 @@ def Match():
                                 jC = ReturnJC(j[0])
                                 ordersList[iC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
-                                InsertTrade(ordersList[iC][0], ordersList[jC][0], tempQ, j[6])
+                                InsertTrade(ordersList[iC], ordersList[jC], tempQ, j[6])
                                 ordersList[jC][2] = (int(j[2]) - int(tempQ))
                                 UpdateQuantity(ordersList[jC][0], i[2])
                                 DeleteOrder(ordersList[iC][0])
@@ -107,7 +107,7 @@ def Match():
                             jC = ReturnJC(j[0])
                             ordersList[jC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
-                            InsertTrade(ordersList[jC][0], ordersList[iC][0], j[2], j[6])
+                            InsertTrade(ordersList[jC], ordersList[iC], j[2], j[6])
                             DeleteOrder(ordersList[iC][0])
                             DeleteOrder(ordersList[jC][0])
                             tempQ = 0
@@ -115,7 +115,7 @@ def Match():
                             jC = ReturnJC(j[0])
                             ordersList[iC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
-                            InsertTrade(ordersList[jC][0], ordersList[iC][0], tempQ, j[6])
+                            InsertTrade(ordersList[jC], ordersList[iC], tempQ, j[6])
                             ordersList[jC][2] = (int(j[2]) - int(i[2]))
                             UpdateQuantity(ordersList[jC][0], tempQ)
                             DeleteOrder(ordersList[iC][0])
@@ -124,7 +124,7 @@ def Match():
                             jC = ReturnJC(j[0])
                             ordersList[jC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
-                            InsertTrade(ordersList[jC][0], ordersList[iC][0], j[2], j[6])
+                            InsertTrade(ordersList[jC], ordersList[iC], j[2], j[6])
                             ordersList[iC][2] = (int(i[2]) - int(j[2]))
                             tempQ = tempQ - j[2]
                             UpdateQuantity(ordersList[iC][0], j[2])
@@ -143,7 +143,7 @@ def Match():
                             jC = ReturnJC(j[0])
                             ordersList[jC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
-                            InsertTrade(ordersList[iC][0], ordersList[jC][0], tempQ, j[6])
+                            InsertTrade(ordersList[iC], ordersList[jC], tempQ, j[6])
                             DeleteOrder(ordersList[iC][0])
                             DeleteOrder(ordersList[jC][0])
                             tempQ = 0
@@ -151,7 +151,7 @@ def Match():
                             jC = ReturnJC(j[0])
                             ordersList[iC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
-                            InsertTrade(ordersList[iC][0], ordersList[jC][0], tempQ, j[6])
+                            InsertTrade(ordersList[iC], ordersList[jC], tempQ, j[6])
                             ordersList[jC][2] = (int(j[2]) - int(i[2]))
                             UpdateQuantity(ordersList[jC][0], tempQ)
                             DeleteOrder(ordersList[iC][0])
@@ -160,7 +160,7 @@ def Match():
                             jC = ReturnJC(j[0])
                             ordersList[jC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
-                            InsertTrade(ordersList[iC][0], ordersList[jC][0], j[2], j[6])
+                            InsertTrade(ordersList[iC], ordersList[jC], j[2], j[6])
                             ordersList[iC][2] = (int(i[2]) - int(j[2]))
                             tempQ = tempQ - j[2]
                             UpdateQuantity(ordersList[iC][0], j[2])
