@@ -30,9 +30,9 @@ CORS(app)
 # endpoint to show all securities
 @app.route('/securities', methods=['GET'])
 def show_security():
+    global conn
+    cursor = conn.cursor()
     try:
-        global conn
-        cursor = conn.cursor()
         cursor.execute("SELECT * FROM Securities_Index;")
         empRows = cursor.fetchall()
         response = jsonify(empRows)
@@ -48,6 +48,7 @@ def show_security():
 @app.route('/addsecurity', methods=['POST'])
 def add_security():
     global conn
+    cursor = conn.cursor()
     try:
         _json = request.json
         _ISIN = _json['ISIN']
@@ -58,7 +59,6 @@ def add_security():
         if _ISIN and _name and _type and _ltprice and request.method == 'POST':
             sqlQuery = "INSERT INTO securities_index(ISIN,name,type,ltprice) VALUES(%s, %s, %s, %s);"
             bindData = (_ISIN, _name, _type, _ltprice)
-            cursor = conn.cursor()
             cursor.execute(sqlQuery, bindData)
             conn.commit()
             response = jsonify('Security added successfully!')
@@ -76,8 +76,8 @@ def add_security():
 @app.route('/orders', methods=['GET'])
 def show_orders():
     global conn
+    cursor = conn.cursor()
     try:
-        cursor = conn.cursor()
         cursor.execute("SELECT * FROM Order_Index;")
         empRows = cursor.fetchall()
         response = jsonify(empRows)
@@ -94,6 +94,7 @@ def show_orders():
 @app.route('/addorder', methods=['POST'])
 def add_order():
     global conn
+    cursor = conn.cursor()
     try:
         _json = request.json
         _id = _json['id']
@@ -108,7 +109,6 @@ def add_order():
         if _ISIN and _id and _price and _qty and _identifier and _BOS and _LOM and request.method == 'POST':
             sqlQuery = "INSERT INTO order_index(id,ISIN,price,qty,aon,identifier,BOS,LOM) VALUES(%s, %s, %s, %s ,%s, %s, %s ,%s);"
             bindData = (_id, _ISIN, _price, _qty,_aon,_identifier, _BOS, _LOM)
-            cursor = conn.cursor()
             cursor.execute(sqlQuery, bindData)
             conn.commit()
             response = jsonify('Order added successfully!')
@@ -126,8 +126,8 @@ def add_order():
 @app.route('/Rejectedorders', methods=['GET'])
 def show_Rejectedorders():
     global conn
+    cursor = conn.cursor()
     try:
-        cursor = conn.cursor()
         cursor.execute("SELECT * FROM Rejected_Order;")
         empRows = cursor.fetchall()
         response = jsonify(empRows)
@@ -143,6 +143,7 @@ def show_Rejectedorders():
 @app.route('/addRejectedorder', methods=['POST'])
 def add_Rejectedorder():
     global conn
+    cursor = conn.cursor()
     try:
         _json = request.json
         _sr_no = _json['sr_no']
@@ -152,11 +153,9 @@ def add_Rejectedorder():
         _qty = _json['qty']
         _aon = _json['aon']
         _LOM = _json['LOM']
-
         if _sr_no and _ISIN and _price and _BOS and _qty and _aon and _LOM and request.method == 'POST':
             sqlQuery = "INSERT INTO rejected_order(sr_no,ISIN,price,BOS,qty,aon,LOM) VALUES(%s, %s, %s, %s, %s, %s, %s);"
             bindData = (_sr_no,_ISIN, _price, _BOS, _qty, _aon, _LOM)
-            cursor = conn.cursor()
             cursor.execute(sqlQuery, bindData)
             conn.commit()
             response = jsonify('Rejected Order added successfully!')
@@ -175,8 +174,8 @@ def add_Rejectedorder():
 @app.route('/Manualorders', methods=['GET'])
 def show_Manualorders():
     global conn
+    cursor = conn.cursor()
     try:
-        cursor = conn.cursor()
         cursor.execute("SELECT * FROM  Manual_Orders;")
         empRows = cursor.fetchall()
         response = jsonify(empRows)
@@ -193,6 +192,7 @@ def show_Manualorders():
 @app.route('/addManualorder', methods=['POST'])
 def add_Manualorder():
     global conn
+    cursor = conn.cursor()
     try:
         _json = request.json
         _ISIN = _json['ISIN']
@@ -206,7 +206,6 @@ def add_Manualorder():
         if _ISIN and _price and _qty and _aon and _identifier and _BOS and _LOM and request.method == 'POST':
             sqlQuery = "INSERT INTO manual_orders(ISIN,price,qty,aon,identifier,BOS,LOM) VALUES(%s, %s, %s, %s,%s,%s,%s);"
             bindData = (_ISIN, _price, _qty, _aon, _identifier, _BOS, _LOM)
-            cursor = conn.cursor()
             cursor.execute(sqlQuery, bindData)
             conn.commit()
             response = jsonify('Manual Order added successfully!')
@@ -225,8 +224,8 @@ def add_Manualorder():
 @app.route('/trade', methods=['GET'])
 def show_trade():
     global conn
+    cursor = conn.cursor()
     try:
-        cursor = conn.cursor()
         cursor.execute("SELECT * FROM  Trade_Index;")
         empRows = cursor.fetchall()
         response = jsonify(empRows)
@@ -243,6 +242,7 @@ def show_trade():
 @app.route('/addtrade', methods=['POST'])
 def add_trade():
     global conn
+    cursor = conn.cursor()
     try:
         _json = request.json
         _id = _json['id']
@@ -253,7 +253,6 @@ def add_trade():
         if _id and _buyorder_id and _sellorder_id and _price and _qty and request.method == 'POST':
             sqlQuery = "INSERT INTO trade_index(id,buyorder_id,sellorder_id,price,qty) VALUES(%s,%s, %s, %s, %s);"
             bindData = (_id, _buyorder_id, _sellorder_id, _price, _qty)
-            cursor = conn.cursor()
             cursor.execute(sqlQuery, bindData)
             conn.commit()
             response = jsonify('trade added successfully!')
@@ -272,14 +271,13 @@ def add_trade():
 @app.route('/portfolio', methods=['GET'])
 def show_porfolio():
     global conn
+    cursor = conn.cursor()
     try:
-        cursor = conn.cursor()
         cursor.execute("SELECT * FROM  My_Portfolio;")
         empRows = cursor.fetchall()
         response = jsonify(empRows)
         response.status_code = 200
         return response
-
     except Exception as e:
         print(e)
     finally:
@@ -290,6 +288,7 @@ def show_porfolio():
 @app.route('/addportfolio', methods=['POST'])
 def add_portfolio():
     global conn
+    cursor = conn.cursor()
     try:
         _json = request.json
         _ISIN = _json['ISIN']
@@ -299,7 +298,6 @@ def add_portfolio():
         if _ISIN and _name and _qty and request.method == 'POST':
             sqlQuery = "INSERT INTO my_portfolio(ISIN,name,qty) VALUES(%s,%s, %s);"
             bindData = (_ISIN, _name, _qty)
-            cursor = conn.cursor()
             cursor.execute(sqlQuery, bindData)
             conn.commit()
             response = jsonify('Addition to portfolio successful!')
