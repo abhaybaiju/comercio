@@ -21,6 +21,7 @@ import Slide from '@material-ui/core/Slide';
 
 import { mainListItems, secondaryListItems } from './listItems';
 import EnhancedTable from '../components/EnhancedTable';
+import Tradetable from '../components/Tradetable';
 
 const drawerWidth = 240;
 
@@ -164,17 +165,17 @@ export default function Admin() {
             {/* Total Orders */}
             <Grid item xs={12} >
               <Paper className={classes.paper} >
-                <EnhancedTable/>
+                <EnhancedTable label="All Orders" />
               </Paper>
             </Grid>
             <Grid item xs={12} >
               <Paper className={classes.paper} >
-                <EnhancedTable/>
+                <EnhancedTable label="Rejected Orders"/>
               </Paper>
             </Grid>
             <Grid item xs={12} >
               <Paper className={classes.paper} >
-                <EnhancedTable/>
+                <Tradetable label="Trades"/>
               </Paper>
             </Grid>
           </Grid>

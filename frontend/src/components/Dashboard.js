@@ -194,7 +194,8 @@ export default function Dashboard() {
           </Grid>
           {/*Right Grid*/}
             <Grid item container spacing={0} justify="space-evenly" lg={4}>
-              <Grid item lg={12}><Paper className={classes.paper} style={{height : 500}}>
+              <Grid item lg={12} style={{height : 455}}>
+                <Paper className={classes.paper} >
                     <Orderform />
                   </Paper>
               </Grid>

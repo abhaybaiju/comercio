@@ -49,13 +49,13 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+
 const headCells = [
   { id: 'id', numeric: true, disablePadding: false, label: 'ID' },
-  { id: 'ISIN', numeric: false, disablePadding: true, label: 'ISIN' },
-  { id: 'BOS', numeric: false, disablePadding: false, label: 'Type' },
-  { id: 'qty', numeric: true, disablePadding: false, label: 'Quantity' },
-  { id: 'price', numeric: true, disablePadding: false, label: 'Price' },
-  { id: 'LOM', numeric: false, disablePadding: false, label: 'LOM' },
+  { id: 'buyorder_id', numeric: false, disablePadding: false, label: 'BID' },
+  { id: 'sellorder_id', numeric: true, disablePadding: false, label: 'SID' },
+  { id: 'qty', numeric: true, disablePadding: false, label: 'QTY' },
+  { id: 'price', numeric: false, disablePadding: false, label: 'PRICE' },
 ];
 
 function EnhancedTableHead(props) {
@@ -179,35 +179,23 @@ export default function EnhancedTable(props) {
   const [rows,setRows] = React.useState([]);
 
   var temp = [];
-  function createData(id,ISIN, BOS, qty, price, LOM) {
-    temp = [{ "id":id, "ISIN":ISIN,"BOS":BOS,"qty":qty,"price":price,"LOM":LOM }, ...temp,]
+  
+  function createTradeData(id, buyorder_id, sellorder_id, qty, price) {
+    temp = [{ "id":id,"buyorder_id":buyorder_id,"qty":qty,"price":price,"sellorder_id":sellorder_id }, ...temp,]
   }
 
   React.useEffect(() => {
-    if(props.label==="All Orders"){
-    const interval = setInterval(() => {
-      axios.get('/orders').then(resp => {
-        setRows([]);
-        temp=[];
-        resp.data.map((row)=> createData(row.id,row.ISIN,row.BOS,row.qty,row.price,row.LOM))
-        setRows(temp);
-        });
-    }, 2000);
-    return () => clearInterval(interval);}
-    
-    else if(props.label==="Rejected Orders"){
-
       const interval = setInterval(() => {
-      axios.get('/Rejectedorders').then(resp => {
+      axios.get('/trade').then(resp => {
         setRows([]);
         temp=[];
-        resp.data.map((row)=> createData(row.sr_no,row.ISIN,row.BOS,row.qty,row.price,row.LOM))
+        resp.data.map((row)=> createTradeData(row.id,row.buyorder_id,row.sellorder_id,row.qty,row.price))
         setRows(temp);
         });
     }, 2000);
     return () => clearInterval(interval);
 
-    }
+    
   }, []);
 
 
@@ -270,11 +258,10 @@ export default function EnhancedTable(props) {
                       <TableCell component="th" id={labelId} scope="row">
                         {row.id}
                       </TableCell>
-                      <TableCell align="left">{row.ISIN}</TableCell>
-                      <TableCell align="left">{row.BOS}</TableCell>
+                      <TableCell align="left">{row.buyorder_id}</TableCell>
+                      <TableCell align="left">{row.sellorder_id}</TableCell>
                       <TableCell align="left">{row.qty}</TableCell>
                       <TableCell align="left">{row.price}</TableCell>
-                      <TableCell align="left">{row.LOM=='m'?"Market":"Limit"}</TableCell>
                     </TableRow>
                   );
                 })}
