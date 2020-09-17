@@ -1,9 +1,8 @@
 import React,{ useEffect, useState } from 'react';
-import { useTheme } from '@material-ui/core/styles';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer,Tooltip} from 'recharts';
-import Title from './Title';
 import axios from 'axios';
 import Skeleton from '@material-ui/lab/Skeleton';
+import { Typography } from '@material-ui/core';
 
 
 
@@ -11,8 +10,6 @@ import Skeleton from '@material-ui/lab/Skeleton';
 
 
 export default function Chart() {
-  const theme = useTheme();
-
   const [rows,setRows] = useState([]);
 
   useEffect(() => {
@@ -23,40 +20,30 @@ export default function Chart() {
     axios.get('/orders').then(resp => {
       setRows([]);
     resp.data.map((row)=> createData(row.BOS,row.LOM,row.Order_isin,row.aon,row.identifier,row.price,row.qty))
-    console.log("Fetching chart",resp.data); 
     });}
     , 2000);
     return () => clearInterval(id);  
   }, []);
   
-  
-  console.log("Chart ROWS",rows)
-
 
   return (
     <React.Fragment>
-      <Title>Today</Title>
-      <ResponsiveContainer>
+      <Typography component="h2" variant="h6" style={{color:"#ADF5FF"}} gutterBottom>
+      Today
+    </Typography>
+      <ResponsiveContainer >
         {rows.length>0 ? (
         <LineChart
           data={rows}
           margin={{
             top: 16,
             right: 16,
-            bottom: 0,
-            left: 24,
+            bottom: 16,
+            left: 2,
           }}
         >
-          <YAxis stroke={theme.palette.text.secondary}>
-            <Label
-              angle={270}
-              position="left"
-              style={{ textAnchor: 'middle', fill: theme.palette.text.primary }}
-            >
-              Price ($)
-            </Label>
-          </YAxis>
-          <Line isAnimationActive={false} type="monotone" dataKey="amount" stroke={theme.palette.primary.main} />
+          <YAxis stroke="#ADF5FF" margin/>
+          <Line strokeWidth={4} isAnimationActive={true} animationEasing='ease-in-out' type="monotone" dot={false} dataKey="amount" stroke="#ADF5FF" />
         </LineChart>) : (<Skeleton variant="rect" animation="wave"/>)}
       </ResponsiveContainer>
     </React.Fragment>

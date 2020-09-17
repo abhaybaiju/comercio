@@ -17,6 +17,7 @@ import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import Zoom from '@material-ui/core/Zoom';
 import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
@@ -175,12 +176,12 @@ export default function Dashboard() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container justify="space-evenly" spacing={1} style={{maxHeight: 650}}>
+          <Grid container justify="space-evenly" spacing={2} style={{maxHeight: 650}}>
             {/*Left Grid*/}
-          <Grid container item spacing={1} justify="space-around" lg={8} >
+          <Grid container item spacing={3} justify="space-around" lg={8} >
             {/* Chart */}
-            <Grid item xs={12} md={8} lg={12}>
-              <Paper className={fixedHeightPaper}>
+            <Grid item xs={12} md={8} lg={12} >
+              <Paper style={{backgroundColor:"#303D88", height:350}} className={fixedHeightPaper}>
                 <Chart />
               </Paper>
             </Grid>
@@ -192,8 +193,8 @@ export default function Dashboard() {
             </Grid>
           </Grid>
           {/*Right Grid*/}
-            <Grid item container spacing={1} justify="space-evenly" lg={4}>
-              <Grid item lg={12}><Paper className={classes.paper} style={{height : 450}}>
+            <Grid item container spacing={0} justify="space-evenly" lg={4}>
+              <Grid item lg={12}><Paper className={classes.paper} style={{height : 500}}>
                     <Orderform />
                   </Paper>
               </Grid>

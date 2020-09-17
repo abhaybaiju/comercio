@@ -7,7 +7,7 @@ function Landing() {
     const str = "easy";
 
     return (
-        <div>
+        <div style={{backgroundColor:"#fafafa"}}>
             <Container >
             <div class="custom-shape-divider-bottom-1599906837">
     <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
