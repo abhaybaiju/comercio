@@ -1,6 +1,6 @@
+import mysql.connector
 from operator import itemgetter
 from backend.randomOrderGenerator import RandomGenerator
-import mysql.connector
 from backend.tools import DeleteOrder, UpdateQuantity, ManualOrders, ClearOrders, InsertTrade
 
 ordersList = RandomGenerator(100)
@@ -98,7 +98,7 @@ def Match():
             # s m
             if i[4] == 's' and i[5] == 'm':
                 tempQ = i[2]
-                tempList = SortList(filter(lambda x: x[4] == 's' and x[1] == i[1], ordersList), 6, False)
+                tempList = SortList(filter(lambda x: x[4] == 'b' and x[1] == i[1] and x[5] == 'l', ordersList), 6, False)
                 for j in tempList:
                     jC = ReturnJC(j[0])
                     if ordersList[jC][8] == 0 and j[4] == 'b' and i[1] == j[1]:
@@ -134,7 +134,7 @@ def Match():
             # b m
             if i[4] == 'b' and i[5] == 'm':
                 tempQ = i[2]
-                tempList = SortList(filter(lambda x: x[4] == 's' and x[1] == i[1], ordersList), 6, False)
+                tempList = SortList(filter(lambda x: x[4] == 's' and x[1] == i[1] and x[5] == 'l', ordersList), 6, False)
                 for j in tempList:
                     jC = ReturnJC(j[0])
                     if ordersList[jC][8] == 0 and j[4] == 's' and i[1] == j[1]:

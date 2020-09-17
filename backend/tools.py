@@ -1,6 +1,7 @@
 import mysql.connector
 from datetime import datetime
 from backend.randomOrderGenerator import q
+from backend.securityGenerator import UpdateEquityPrice
 
 conn = mysql.connector.connect(
     host="localhost",
@@ -21,9 +22,9 @@ def ClearOrders():
     conn.commit()
     curr.execute('''delete from Rejected_order;''')
     conn.commit()
+    curr.execute('''update my_portfolio set''')
     # TODO: set all quantities in my portfolio as 0
-    # curr.execute('''delete from My_Portfolio''')
-    # conn.commit()
+    # TODO: reset all equities to their default prices
 
 
 def DeleteOrder(id):
@@ -52,6 +53,7 @@ def InsertTrade(buy, sell, quan, price):
     cur.execute('''insert into trade_index (buyorder_id, sellorder_id, price, qty) values (?, ?, ?, ?);''',
                 (buy[0], sell[0], price, quan))
     conn.commit()
+    UpdateEquityPrice(buy[1], price)
     q.b -= quan
     q.s -= quan
 
