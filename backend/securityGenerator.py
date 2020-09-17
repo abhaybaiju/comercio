@@ -69,6 +69,17 @@ def CreateEquityTable():
     conn.commit()
 
 
+# function to reset the equity list and table to the default values
+def ResetEquities():
+    global conn, equityList
+    equityList.clear()
+    CreateEquityList()
+    cur = conn.cursor()
+    cur.execute('''delete from Securities_Index;''')
+    conn.commit()
+    CreateEquityTable()
+
+
 # function to retrieve the attributes of a particular equity
 def GetEquityAttributes(find):
     resultList = list()

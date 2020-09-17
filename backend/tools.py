@@ -1,7 +1,7 @@
 import mysql.connector
 from datetime import datetime
 from backend.randomOrderGenerator import q
-from backend.securityGenerator import UpdateEquityPrice
+from backend.securityGenerator import UpdateEquityPrice, ResetEquities
 
 conn = mysql.connector.connect(
     host="localhost",
@@ -14,6 +14,7 @@ offset = 0
 
 
 def ClearOrders():
+    ResetEquities()
     global conn
     curr = conn.cursor()
     curr.execute('''delete from order_index;''')
@@ -25,8 +26,6 @@ def ClearOrders():
     curr1 = conn.cursor()
     curr1.execute('''update my_portfolio set qty = 0;''')
     conn.commit()
-    # TODO: set all quantities in my portfolio as 0
-    # TODO: reset all equities to their default prices
 
 
 def DeleteOrder(id):
