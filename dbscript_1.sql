@@ -1,4 +1,5 @@
 # noinspection SqlNoDataSourceInspectionForFile
+# new schema
 
 CREATE TABLE Securities_Index (
 	ISIN varchar(30) PRIMARY KEY,
@@ -56,5 +57,3 @@ CREATE TABLE My_Portfolio (
 	name varchar(30),
 	qty INT
 );
-
-# insert into manual_orders(name, isin, price, qty, aon, identifier, bos, lom) values ('Apple', 'APPLE1984', 1000, 900000, '0', 0, 'b', 'm');
