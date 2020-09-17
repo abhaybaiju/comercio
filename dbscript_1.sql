@@ -57,4 +57,4 @@ CREATE TABLE My_Portfolio (
 	qty INT
 );
 
-# insert into manual_orders(name, isin, price, qty, aon, identifier, bos, lom) values ('Apple', 'APPLE1984', 1000, 50, '0', 0, 'b', 'm');
+# insert into manual_orders(name, isin, price, qty, aon, identifier, bos, lom) values ('Apple', 'APPLE1984', 1000, 900000, '0', 0, 'b', 'm');

@@ -189,6 +189,13 @@ def get_Rejected_orders():
     result = cur.fetchall()
     return jsonify(result)
 
+@app.route("/tradeindex", methods=["GET"])
+def get_trade_index():
+    global conn
+    cur = conn.cursor()
+    cur.execute('''select * from Trade_Index;''')
+    result = cur.fetchall()
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run(debug=False)
