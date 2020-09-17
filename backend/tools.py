@@ -22,7 +22,9 @@ def ClearOrders():
     conn.commit()
     curr.execute('''delete from Rejected_order;''')
     conn.commit()
-    curr.execute('''update my_portfolio set''')
+    curr1 = conn.cursor()
+    curr1.execute('''update my_portfolio set qty = 0;''')
+    conn.commit()
     # TODO: set all quantities in my portfolio as 0
     # TODO: reset all equities to their default prices
 
