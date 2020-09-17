@@ -17,11 +17,10 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import Zoom from '@material-ui/core/Zoom';
+import Slide from '@material-ui/core/Slide';
+
 import { mainListItems, secondaryListItems } from './listItems';
-import Chart from './Chart';
-import Deposits from './Deposits';
-import Orders from './Orders';
-import Orderform from './Orderform';
 import EnhancedTable from '../components/EnhancedTable';
 
 const drawerWidth = 240;
@@ -160,6 +159,7 @@ export default function Admin() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
+          <Slide direction="up" in={true} mountOnEnter unmountOnExit>
           <Grid container justify="space-evenly" spacing={1}>
           <Grid container item spacing={3} justify="space-around" lg={12} >
             {/* Total Orders */}
@@ -180,6 +180,7 @@ export default function Admin() {
             </Grid>
           </Grid>
           </Grid>
+          </Slide>
         </Container>
       </main>
     </div>
