@@ -27,26 +27,24 @@ export default function Orders() {
   const [rows,setRows] = useState([]);
 
   useEffect(() => {
-    function createData(id, BOS, LOM, Order_isin, aon, identifier, price, qty) {
-      setRows(rows => [{ "id":id,"BOS":BOS, "LOM":LOM, "Order_isin":Order_isin, "aon":aon, "identifier":identifier, "price":price, "qty":qty}, ...rows,])
+    function createData(id, BOS, LOM, ISIN, aon, identifier, price, qty) {
+      setRows(rows => [{ "id":id,"BOS":BOS, "LOM":LOM, "ISIN":ISIN, "aon":aon, "identifier":identifier, "price":price, "qty":qty}, ...rows,])
     }
     const id = setInterval(() => {
-    axios.get('/orders').then(resp => {
+    axios.get('/Manualorders').then(resp => {
     setRows([]);
-    resp.data.map((row)=> createData(row.id,row.BOS,row.LOM,row.Order_isin,row.aon,row.identifier,row.price,row.qty))
-    console.log("Fetching",resp.data); 
+    resp.data.map((row)=> createData(row.id,row.BOS,row.LOM,row.ISIN,row.aon,row.identifier,row.price,row.qty))
     });}
     , 2000);
     return () => clearInterval(id);  
   }, []);
   
   
-  console.log("ROWS",rows)
   const classes = useStyles();
   return (
     
     <React.Fragment>
-      <Title>Recent Trades</Title>
+      <Title>Manual Orders</Title>
       {rows.length>0 ? (
       <Table size="medium">
         <TableHead>
@@ -63,7 +61,7 @@ export default function Orders() {
           {rows.slice(0,5).map((row) => (
             <TableRow key={row.id}>
               <TableCell>{row.id}</TableCell>
-              <TableCell>{row.Order_isin}</TableCell>
+              <TableCell>{row.ISIN}</TableCell>
               <TableCell>{row.BOS==='b'?"Buy":"Sell"}</TableCell>
               <TableCell>{row.LOM==='l'?"Limit":"Market"}</TableCell>
               <TableCell>{row.qty}</TableCell>
@@ -74,7 +72,7 @@ export default function Orders() {
       </Table>) : (<Skeleton animation="wave" variant="rect" height={300}/>)}
       <div className={classes.seeMore}>
         <Button variant="outlined" color="primary" href="/admin" >
-          See more orders
+          See all orders
         </Button>
       </div>
     </React.Fragment>

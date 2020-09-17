@@ -10,7 +10,7 @@ CORS(app)
 
 mysql = MySQL()
 app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = '1234'
+app.config['MYSQL_DATABASE_PASSWORD'] = '12345678'
 app.config['MYSQL_DATABASE_DB'] = 'oms'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
@@ -194,7 +194,6 @@ def show_Manualorders():
 def add_Manualorder():
     try:
         _json = request.json
-        _id = _json['id']
         _ISIN = _json['ISIN']
         _price = _json['price']
         _qty = _json['qty']
@@ -203,9 +202,9 @@ def add_Manualorder():
         _BOS = _json['BOS']
         _LOM = _json['LOM']
 
-        if _id and _ISIN and _price and _qty and _aon and _identifier and _BOS and _LOM and request.method == 'POST':
-            sqlQuery = "INSERT INTO manual_orders(id,ISIN,price,qty,aon,identifier,BOS,LOM) VALUES(%s,%s, %s, %s, %s,%s,%s,%s);"
-            bindData = (_id, _ISIN, _price, _qty, _aon, _identifier, _BOS, _LOM)
+        if _ISIN and _price and _qty and _aon and _identifier and _BOS and _LOM and request.method == 'POST':
+            sqlQuery = "INSERT INTO manual_orders(ISIN,price,qty,aon,identifier,BOS,LOM) VALUES(%s, %s, %s, %s,%s,%s,%s);"
+            bindData = (_ISIN, _price, _qty, _aon, _identifier, _BOS, _LOM)
             conn = mysql.connect()
             cursor = conn.cursor()
             cursor.execute(sqlQuery, bindData)

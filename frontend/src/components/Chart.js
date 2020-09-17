@@ -3,7 +3,7 @@ import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer,Tooltip} from
 import axios from 'axios';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { Typography } from '@material-ui/core';
-
+import { useStateValue } from '../StateProvider'; 
 
 
 // Generate Sales Data
@@ -11,25 +11,33 @@ import { Typography } from '@material-ui/core';
 
 export default function Chart() {
   const [rows,setRows] = useState([]);
-
+  const [{ user, stockPrice }, dispatch] = useStateValue();
   useEffect(() => {
-    function createData(BOS, LOM, Order_isin, aon, identifier, price, qty) {
+    function createData(price) {
       setRows(rows => [...rows,{ "time":'03:00', "amount":price},])
     }
+    setRows([]);
     const id = setInterval(() => {
-    axios.get('/orders').then(resp => {
-      setRows([]);
-    resp.data.map((row)=> createData(row.BOS,row.LOM,row.Order_isin,row.aon,row.identifier,row.price,row.qty))
+    axios.get('/securities').then(resp => {
+      resp = resp.data.filter(function(item){
+        return item.name === securities[user];         
+    })
+    dispatch({
+      type: 'SET_PRICE',
+      stockPrice: resp[0].ltprice,
+  });
+    createData(resp[0].ltprice);
     });}
     , 2000);
     return () => clearInterval(id);  
-  }, []);
-  
+  }, [user]);
+
+  const securities = ['Apple','Microsoft','IBM','Xerox', 'Pixar'];
 
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" style={{color:"#ADF5FF"}} gutterBottom>
-      Today
+      {securities[user]}
     </Typography>
       <ResponsiveContainer >
         {rows.length>0 ? (

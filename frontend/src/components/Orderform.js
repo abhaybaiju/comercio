@@ -7,6 +7,8 @@ import TextField from '@material-ui/core/TextField';
 import {Tabs, Tab, Grid, Button, Radio, RadioGroup, FormControl, FormControlLabel, FormLabel, Select, MenuItem, InputLabel} from '@material-ui/core';
 import Title from './Title';
 import axios from 'axios';
+import { useStateValue } from '../StateProvider'; 
+
 
 function preventDefault(event) {
   event.preventDefault();
@@ -28,16 +30,22 @@ function TabPanel(props){
 }
 
 export default function Orderform() {
+  
+  const [{ user, stockPrice }, dispatch] = useStateValue();
   const classes = useStyles();
 
   const [value, setValue] = useState(0);
   const [qty, setQty] = useState();
   const [price, setPrice] = useState();
   const [radio, setRadio] = useState('m');
-  const [security, setSecurity] = React.useState('');
+  const [security, setSecurity] = React.useState(0);
 
   const handleSelectChange = (event) => {
     setSecurity(event.target.value);
+    dispatch({
+      type: 'SET_USER',
+      user: event.target.value,
+  });
   };
 
   const handleTabChange = (event, newValue) => {
@@ -53,17 +61,18 @@ export default function Orderform() {
   };
 
   const handleSubmit = () => {
-    const securities = ['AAPL','FB','GOOGL','MSFT'];
+    const securities = ['APP1984','MIC1990','IBM1950','XER1960','PIX1991'];
     const postObject = {
-      'Order_isin' : securities[security],
-      'price': price,
+      'ISIN' : securities[security],
+      'id':10,
+      'price': radio==='m'?stockPrice:price,
       'qty': qty,
       'aon': 'n',
-      'identifier': 0,
+      'identifier': 10,
       'BOS': value?'s':'b',
       'LOM': radio
     }
-    axios.post('/order', postObject).then(response=>{ console.log(response)});
+    axios.post('/addManualorder', postObject).then(response=>{ console.log(response)});
   }
 
   return (
@@ -95,18 +104,16 @@ export default function Orderform() {
           onChange={handleSelectChange}
           label="Security"
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
           <MenuItem value={0}>Apple</MenuItem>
-          <MenuItem value={1}>Facebook</MenuItem>
-          <MenuItem value={2}>Google</MenuItem>
-          <MenuItem value={3}>Microsoft</MenuItem>
+          <MenuItem value={1}>Microsoft</MenuItem>
+          <MenuItem value={2}>IBM</MenuItem>
+          <MenuItem value={3}>Xerox</MenuItem>
+          <MenuItem value={4}>Pixar</MenuItem>
         </Select>
       </FormControl>
       <Grid >
         <TextField onChange={event => setQty(event.target.value)} margin="normal" id="outlined-basic" label="Quantity" variant="outlined" value={qty} />
-        <TextField onChange={event => setPrice(event.target.value)} margin="normal" id="outlined-basic" label="Price" variant="outlined" value={price}/>  
+        <TextField onChange={event => setPrice(event.target.value)} margin="normal" id="outlined-basic" label="Price" variant="outlined" value={radio==='m'?stockPrice:price}/>  
         <FormControl component="fieldset">
           <RadioGroup row aria-label="LOM" name="LOM" value={radio} onChange={handleRadioChange}>
             <FormControlLabel value="m" control={<Radio color="primary"/>} label="Market" />
@@ -128,18 +135,16 @@ export default function Orderform() {
           onChange={handleSelectChange}
           label="Security"
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
           <MenuItem value={0}>Apple</MenuItem>
-          <MenuItem value={1}>Facebook</MenuItem>
-          <MenuItem value={2}>Google</MenuItem>
-          <MenuItem value={3}>Microsoft</MenuItem>
+          <MenuItem value={1}>Microsoft</MenuItem>
+          <MenuItem value={2}>IBM</MenuItem>
+          <MenuItem value={3}>Xerox</MenuItem>
+          <MenuItem value={4}>Pixar</MenuItem>
         </Select>
       </FormControl>
       <Grid >
         <TextField onChange={event => setQty(event.target.value)} margin="normal" id="outlined-basic" label="Quantity" variant="outlined" value={qty}/>
-        <TextField onChange={event => setPrice(event.target.value)}margin="normal" id="outlined-basic" label="Price" variant="outlined" value={price}/>
+        <TextField onChange={event => setPrice(event.target.value)}margin="normal" id="outlined-basic" label="Price" variant="outlined" value={radio==='m'?stockPrice:price}/>
         <FormControl component="fieldset">
           <RadioGroup row aria-label="gender" name="gender1" value={radio} onChange={handleRadioChange}>
             <FormControlLabel value="m" control={<Radio color="primary"/>} label="Market" />
