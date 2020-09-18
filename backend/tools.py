@@ -1,6 +1,7 @@
 import mysql.connector
 from datetime import datetime
 from backend.randomOrderGenerator import q
+from time import sleep
 from backend.securityGenerator import UpdateEquityPrice, ResetEquities
 
 conn = mysql.connector.connect(
@@ -26,6 +27,8 @@ def ClearOrders():
     curr1 = conn.cursor()
     curr1.execute('''update my_portfolio set qty = 0;''')
     conn.commit()
+    sleep(10)
+    print("Cleared databases")
 
 
 def DeleteOrder(id):
