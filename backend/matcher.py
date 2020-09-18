@@ -26,14 +26,14 @@ def Match():
         i = ordersList[iC]
         if ordersList[iC][8] == 0:
             # s l
-            if i[4] == 's' and i[5] == 'l':
-                for j in ordersList:
-                    if j[4] == 'b' and ordersList[ReturnJC(j[0])][8] == 0 and j[5] == 'l':
+            if i[4] == 's' and i[5] == 'l' and i[8] == 0:
+                tempQ = i[2]
+                for j in filter(lambda x:x[8] != 1, ordersList):
+                    if j[4] == 'b' and ordersList[ReturnJC(ordersList, j[0])][8] == 0 and j[5] == 'l':
                         if j[6] >= i[6] and i[1] == j[1]:
-                            tempQ = i[2]
                             if tempQ == j[2]:
                                 ordersList[iC][8] += 1
-                                jC = ReturnJC(j[0])
+                                jC = ReturnJC(ordersList, j[0])
                                 ordersList[jC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                                 InsertTrade(ordersList[jC], ordersList[iC], tempQ, j[6])
@@ -41,7 +41,7 @@ def Match():
                                 DeleteOrder(ordersList[jC][0])
                                 tempQ = 0
                             elif tempQ > j[2]:
-                                jC = ReturnJC(j[0])
+                                jC = ReturnJC(ordersList, j[0])
                                 ordersList[jC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                                 InsertTrade(ordersList[jC], ordersList[iC], j[2], j[6])
@@ -50,7 +50,7 @@ def Match():
                                 DeleteOrder(ordersList[jC][0])
                                 tempQ = tempQ - j[2]
                             elif tempQ < j[2]:
-                                jC = ReturnJC(j[0])
+                                jC = ReturnJC(ordersList, j[0])
                                 ordersList[iC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                                 InsertTrade(ordersList[jC], ordersList[iC], tempQ, j[6])
@@ -61,14 +61,14 @@ def Match():
                             if tempQ == 0:
                                 break
             # b l
-            elif i[4] == 'b' and i[5] == 'l':
+            elif i[4] == 'b' and i[5] == 'l' and i[8] == 0:
                 for j in ordersList:
-                    if j[4] == 's' and ordersList[ReturnJC(j[0])][8] == 0 and j[5] == 'l':
+                    if j[4] == 's' and ordersList[ReturnJC(ordersList, j[0])][7] == 0 and j[5] == 'l':
                         if j[6] <= i[6] and i[1] == j[1]:
                             tempQ = i[2]
                             if tempQ == j[2]:
                                 ordersList[iC][8] += 1
-                                jC = ReturnJC(j[0])
+                                jC = ReturnJC(ordersList, j[0])
                                 ordersList[jC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                                 InsertTrade(ordersList[iC], ordersList[jC], tempQ, j[6])
@@ -76,7 +76,7 @@ def Match():
                                 DeleteOrder(ordersList[jC][0])
                                 tempQ = 0
                             elif tempQ > j[2]:
-                                jC = ReturnJC(j[0])
+                                jC = ReturnJC(ordersList, j[0])
                                 ordersList[jC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                                 InsertTrade(ordersList[iC], ordersList[jC], j[2], j[6])
@@ -85,7 +85,7 @@ def Match():
                                 DeleteOrder(ordersList[jC][0])
                                 tempQ = tempQ - j[2]
                             elif tempQ < j[2]:
-                                jC = ReturnJC(j[0])
+                                jC = ReturnJC(ordersList, j[0])
                                 ordersList[iC][8] += 1
                                 doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                                 InsertTrade(ordersList[iC], ordersList[jC], tempQ, j[6])
@@ -100,11 +100,11 @@ def Match():
                 tempQ = i[2]
                 tempList = SortList(filter(lambda x: x[4] == 'b' and x[1] == i[1] and x[5] == 'l', ordersList), 6, True)
                 for j in tempList:
-                    jC = ReturnJC(j[0])
+                    jC = ReturnJC(ordersList, j[0])
                     if ordersList[jC][8] == 0 and j[4] == 'b' and i[1] == j[1]:
                         if tempQ == j[2]:
                             ordersList[iC][8] += 1
-                            jC = ReturnJC(j[0])
+                            jC = ReturnJC(ordersList, j[0])
                             ordersList[jC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                             InsertTrade(ordersList[jC], ordersList[iC], j[2], j[6])
@@ -112,7 +112,7 @@ def Match():
                             DeleteOrder(ordersList[jC][0])
                             tempQ = 0
                         elif tempQ < j[2]:
-                            jC = ReturnJC(j[0])
+                            jC = ReturnJC(ordersList, j[0])
                             ordersList[iC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                             InsertTrade(ordersList[jC], ordersList[iC], tempQ, j[6])
@@ -121,7 +121,7 @@ def Match():
                             DeleteOrder(ordersList[iC][0])
                             tempQ = 0
                         elif tempQ > j[2]:
-                            jC = ReturnJC(j[0])
+                            jC = ReturnJC(ordersList, j[0])
                             ordersList[jC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                             InsertTrade(ordersList[jC], ordersList[iC], j[2], j[6])
@@ -136,11 +136,11 @@ def Match():
                 tempQ = i[2]
                 tempList = SortList(filter(lambda x: x[4] == 's' and x[1] == i[1] and x[5] == 'l', ordersList), 6, False)
                 for j in tempList:
-                    jC = ReturnJC(j[0])
+                    jC = ReturnJC(ordersList, j[0])
                     if ordersList[jC][8] == 0 and j[4] == 's' and i[1] == j[1]:
                         if tempQ == j[2]:
                             ordersList[iC][8] += 1
-                            jC = ReturnJC(j[0])
+                            jC = ReturnJC(ordersList, j[0])
                             ordersList[jC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                             InsertTrade(ordersList[iC], ordersList[jC], tempQ, j[6])
@@ -148,7 +148,7 @@ def Match():
                             DeleteOrder(ordersList[jC][0])
                             tempQ = 0
                         elif tempQ < j[2]:
-                            jC = ReturnJC(j[0])
+                            jC = ReturnJC(ordersList, j[0])
                             ordersList[iC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                             InsertTrade(ordersList[iC], ordersList[jC], tempQ, j[6])
@@ -157,7 +157,7 @@ def Match():
                             DeleteOrder(ordersList[iC][0])
                             tempQ = 0
                         elif tempQ > j[2]:
-                            jC = ReturnJC(j[0])
+                            jC = ReturnJC(ordersList, j[0])
                             ordersList[jC][8] += 1
                             doneOrders.append([ordersList[iC][0], ordersList[jC][0]])
                             InsertTrade(ordersList[iC], ordersList[jC], j[2], j[6])
@@ -167,27 +167,13 @@ def Match():
                             DeleteOrder(ordersList[jC][0])
                         if tempQ == 0:
                             break
+
         iC = iC + 1
 
-        flag = 0
 
-        for t in doneOrders:
-            for t1 in t:
-                if i[0] == t1:
-                    flag = 1
-                    break
-
-        if flag == 0:
-            last = i[0]
-
-        if (iC + 1) % 50 == 0:
-            ordersList = list(filter(lambda x: x[8] != 1, ordersList))
+        if (iC + 1) % 10 == 0:
             newRows = RandomGenerator(10)
             ordersList.extend(newRows)
-            if last != -1:
-                iC = ReturnJC(last) - 1
-            else:
-                iC = -1
             ManualOrders(ordersList)
 
 
@@ -196,10 +182,9 @@ def SortList(ordersL, indexOfList, reverseOrNot):
     return res
 
 
-def ReturnJC(jID):
-    global ordersList
+def ReturnJC(li, jID):
     counter = 0
-    for x in ordersList:
+    for x in li:
         if x[0] == jID:
             return counter
         else:
