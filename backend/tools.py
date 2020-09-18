@@ -24,11 +24,13 @@ def ClearOrders():
     conn.commit()
     curr.execute('''delete from Rejected_order;''')
     conn.commit()
+    curr.execute('''delete from manual_orders;''')
+    conn.commit()
     curr1 = conn.cursor()
     curr1.execute('''update my_portfolio set qty = 0;''')
     conn.commit()
     sleep(10)
-    print("Cleared databases")
+    print("Server started...")
 
 
 def DeleteOrder(id):
