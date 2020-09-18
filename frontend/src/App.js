@@ -24,7 +24,7 @@ function App() {
   
   return (
     <ThemeProvider theme={theme}>
-    <div className="App" >
+    <div className="App"  >
       <Router>
         <Switch>
           <Route path="/dashboard">
@@ -34,7 +34,7 @@ function App() {
             <Admin/>
           </Route>
           <Route path="/">
-            <Landing/>
+            <Landing />
           </Route>
         </Switch>
       </Router>
