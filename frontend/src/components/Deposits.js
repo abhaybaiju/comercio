@@ -25,7 +25,7 @@ export default function Deposits() {
         $3,024.00
       </Typography>
       <Typography color="textSecondary" className={classes.depositContext}>
-        on 12 Sep, 2020
+        on 18 Sep, 2020
       </Typography>
       <div>
         <Link color="primary" href="#" onClick={preventDefault}>
